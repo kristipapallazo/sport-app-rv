@@ -29,10 +29,12 @@ const AuthContext = createContext(initialState);
 const AuthProvider: FunctionComponent<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const isAuthenticated = useMemo<boolean>(() => Boolean(user), [user]);
+  console.log("isAuthenticated :>> ", isAuthenticated);
 
   const { FMcore } = useFMcore();
 
   const authenticateUser = (user: User) => {
+    console.log("user :>> ", user);
     setUser(user);
   };
 

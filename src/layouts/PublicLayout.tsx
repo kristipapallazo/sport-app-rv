@@ -16,10 +16,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export const PublicLayout = ({
-  children,
-  ...restProps
-}: Props): JSX.Element => {
+export const PublicLayout = ({ children, ...restProps }: Props): JSX.Element => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Header
@@ -54,13 +51,11 @@ export const PublicLayout = ({
         />
       </Header>
       <Layout>
-        <Content style={{ paddingTop: 55, paddingLeft: 200 }}>
-          {children}
-        </Content>
+        <Content style={{ paddingTop: 55, paddingLeft: 200 }}>{children}</Content>
       </Layout>
-      <Footer>
+      {/* <Footer>
         Copyright: <a href={"https://bit.al"}>bit.al</a>
-      </Footer>
+      </Footer> */}
     </Layout>
   );
 };

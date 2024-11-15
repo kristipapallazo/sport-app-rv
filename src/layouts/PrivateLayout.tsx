@@ -34,13 +34,13 @@ export const PrivateLayout = ({ children, ...restProps }: PrivateLayoutPropsType
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider collapsible collapsed={false}>
-        <div className="demo-logo-vertical" />
-        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" items={items} />
+        {/* <div className="demo-logo-vertical" />
+        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" items={items} /> */}
       </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }} />
         <Content style={{ maxHeight: "100vh", overflow: "auto" }}>{children}</Content>
-        <Footer style={{ textAlign: "center" }}>Ant Design ©2023 Created by Ant UED</Footer>
+        {/* <Footer style={{ textAlign: "center" }}>Ant Design ©2023 Created by Ant UED</Footer> */}
       </Layout>
     </Layout>
     // <Layout style={{ minHeight: "100vh" }}>

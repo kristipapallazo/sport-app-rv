@@ -19,9 +19,9 @@ const FMcoreProvider: FunctionComponent<FMcoreProviderProps> = ({ children }) =>
     FMcoreWrapper()
       .then(() => {
         window.FMcore.init().then(() => {
-          window.FMcore.setApp("admin").then(() => {
+          window.FMcore.setApp("sport").then(() => {
             setFMcore(window.FMcore);
-            console.log("FMcore admin loaded");
+            console.log("FMcore sport loaded");
           });
         });
       })

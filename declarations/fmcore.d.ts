@@ -236,6 +236,16 @@ interface ApiResponseTypeOdds extends ApiResponseType {
   data: { [marketId: string]: SportMarketOdd };
 }
 
+interface ISport {
+  getSportCollection(sportId: number): any;
+  attachEventListener(): void;
+  updateBetslipStore(action?: any): void;
+  clearBetslip(): void;
+  initApp(): void;
+  getVirtualUrl(param: getVirtualUrlParam): Promise<ApiResponseType>;
+  Collection: ICollection;
+  /* TODO: check later for the return type of the upper fn */
+}
 interface FMcore {
   init(): Promise<void>;
   login(username: string, password: string, saveDevice?: boolean): Promise<ApiResponseType>;
@@ -243,6 +253,7 @@ interface FMcore {
   getUser(): any;
   setApp(app: string): Promise<void>;
   Admin: IAdmin;
+  Sport: ISport;
   // Boot?: Boot;
   // Add additional methods and properties here
 }

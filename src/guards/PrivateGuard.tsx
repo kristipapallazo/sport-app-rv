@@ -1,22 +1,23 @@
-import { FunctionComponent, ReactNode } from 'react'
-import { Navigate, useLocation } from 'react-router-dom'
+import { FunctionComponent, ReactNode } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 
-import useAuth from '../hooks/useAuth'
+import useAuth from "../hooks/useAuth";
 
 interface PrivateGuardProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 const PrivateGuard: FunctionComponent<PrivateGuardProps> = ({ children }) => {
-  const location = useLocation()
+  const location = useLocation();
 
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated } = useAuth();
+  console.log("isAuthenticated in guard :>> ", isAuthenticated);
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} />
+    return <Navigate to="/login" state={{ from: location }} />;
   }
 
-  return <>{children}</>
-}
+  return <>{children}</>;
+};
 
-export default PrivateGuard
+export default PrivateGuard;
