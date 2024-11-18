@@ -229,16 +229,6 @@ interface ApiResponseTypeOdds extends ApiResponseType {
   data: { [marketId: string]: SportMarketOdd };
 }
 
-interface ISport {
-  getSportCollection(sportId: number): any;
-  attachEventListener(): void;
-  updateBetslipStore(action?: any): void;
-  clearBetslip(): void;
-  initApp(): void;
-  getVirtualUrl(param: getVirtualUrlParam): Promise<ApiResponseType>;
-  Collection: ICollection;
-  /* TODO: check later for the return type of the upper fn */
-}
 interface FMcore {
   init(): Promise<void>;
   login(username: string, password: string, saveDevice?: boolean): Promise<ApiResponseType>;
@@ -254,4 +244,32 @@ interface FMcore {
 interface Window {
   gStore: any;
   FMcore: FMcore;
+}
+/* new */
+interface ISport {
+  Collection: ICollection;
+  getSportCollection(sportId: number): any;
+  getSportList(): Promise<Sport[]>;
+  getBootstrap(): Promise<Bootstrap>;
+  initApp(): void;
+}
+type SportList = Sport[];
+type SportId = number;
+interface SportByIdTest {
+  [sportId: SportId]: Sport;
+}
+type SportAllIdsTest = SportId[];
+interface Bootstrap {
+  sportById: SportByIdTest;
+  sportAllIds: SportAllIdsTest;
+  categs: any[];
+}
+interface ISportListManager {
+  addSport(live: number, id: number, name: string, pos: number): void;
+  loadSports(): Promise<void>;
+  getSports(live?: number, ignoreCache?: boolean): Promise<Sport[]>;
+  getSportsFetchKeys(shard?: string): string[];
+}
+interface EventCollection {
+  categs: any[];
 }
