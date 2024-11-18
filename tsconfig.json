@@ -15,6 +15,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve"
+    // "types": ["declarations/fmcore.d.ts", "declarations/front.d.ts"]
   },
   "include": [
     "src",

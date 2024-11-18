@@ -1,0 +1,35 @@
+.main {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+/* Main Header */
+.main-header {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 10px;
+  flex-shrink: 1;
+}
+
+/* Sport Menu */
+.sport-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: auto;
+  column-gap: 5px;
+}
+.selected {
+  background-color: red;
+}
+
+.bodyxxx {
+  display: flex;
+  flex-direction: column;
+  background-color: red;
+}

@@ -31,7 +31,7 @@ const AuthProvider: FunctionComponent<AuthProviderProps> = ({ children }) => {
   const isAuthenticated = useMemo<boolean>(() => Boolean(user), [user]);
   console.log("isAuthenticated :>> ", isAuthenticated);
 
-  const { FMcore } = useFMcore();
+  // const { FMcore } = useFMcore();
 
   const authenticateUser = (user: User) => {
     console.log("user :>> ", user);
@@ -44,9 +44,9 @@ const AuthProvider: FunctionComponent<AuthProviderProps> = ({ children }) => {
 
   const updateUser = () => {};
 
-  useEffect(() => {
-    authenticateUser(FMcore.getUser());
-  }, [FMcore]);
+  // useEffect(() => {
+  //   authenticateUser(FMcore.getUser());
+  // }, [FMcore]);
 
   return (
     <AuthContext.Provider

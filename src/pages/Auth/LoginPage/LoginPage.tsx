@@ -15,7 +15,7 @@ import useAuthService from "../../../services/AuthService";
 interface LoginPageProps {}
 
 const LoginPage: FC<LoginPageProps> = () => {
-  const { FMcore } = useFMcore();
+  // const { FMcore } = useFMcore();
   // const { login } = useAuthService();
   const { isAuthenticated } = useAuth();
   // const { lang } = useTranslate();
@@ -37,13 +37,13 @@ const LoginPage: FC<LoginPageProps> = () => {
   const onFinish = async (values: LoginUserInput) => {
     const { username, password } = values;
     try {
-      const res = await FMcore.login(username, password);
-      console.log("res :>> ", res);
-      if (res && res.data.token) {
-        // res.data => {token: string, user: { ...domainConfigs}}
-        /* TODO:  should store token, user data */
-        // navigate("/dashboard");
-      }
+      // const res = await FMcore.login(username, password);
+      // console.log("res :>> ", res);
+      // if (res && res.data.token) {
+      //   // res.data => {token: string, user: { ...domainConfigs}}
+      //   /* TODO:  should store token, user data */
+      //   // navigate("/dashboard");
+      // }
     } catch (error) {
       message.error("Failed to login!");
     }

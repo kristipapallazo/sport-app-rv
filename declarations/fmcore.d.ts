@@ -82,13 +82,6 @@ type CollectionMapType = "sports" | "tours" | "markets" | "feed-clears";
 interface CollectionParams {
   [key: string]: string;
 }
-interface Sport {
-  id: number;
-  name: string;
-  pos: number;
-  hasLive?: boolean;
-  hasPrematch?: boolean;
-}
 
 interface SportMatch {
   id: string;

@@ -7,9 +7,16 @@ import PublicGuard from "../guards/PublicGuard";
 import Loadable from "./Loadable";
 import PublicLayout from "../layouts/PublicLayout";
 import PrivateLayout from "../layouts/PrivateLayout";
+import MainPage from "../pages/MainPage/MainPage";
 
 const Router = () =>
   useRoutes([
+    {
+      path: "/",
+      element: <MainPage />,
+      index: true,
+    },
+
     // {
     //   path: "/",
     //   element: (
@@ -19,27 +26,27 @@ const Router = () =>
     //   ),
     //   index: true,
     // },
-    {
-      path: "login",
-      element: (
-        <PublicGuard>
-          <PublicLayout>
-            <LoginPage />
-          </PublicLayout>
-        </PublicGuard>
-      ),
-      index: true,
-    },
-    {
-      path: "/dashboard",
-      element: (
-        <PrivateGuard>
-          <PrivateLayout>
-            <DashboardPage />
-          </PrivateLayout>
-        </PrivateGuard>
-      ),
-    },
+    // {
+    //   path: "login",
+    //   element: (
+    //     <PublicGuard>
+    //       <PublicLayout>
+    //         <LoginPage />
+    //       </PublicLayout>
+    //     </PublicGuard>
+    //   ),
+    //   index: true,
+    // },
+    // {
+    //   path: "/dashboard",
+    //   element: (
+    //     <PrivateGuard>
+    //       <PrivateLayout>
+    //         <DashboardPage />
+    //       </PrivateLayout>
+    //     </PrivateGuard>
+    //   ),
+    // },
     // {
     //   path: "auth",
     //   children: [
@@ -66,15 +73,15 @@ const Router = () =>
     //     },
     //   ],
     // },
-    {
-      path: "*",
-      children: [
-        {
-          path: "404",
-          element: <Error404Page />,
-        },
-      ],
-    },
+    // {
+    //   path: "*",
+    //   children: [
+    //     {
+    //       path: "404",
+    //       element: <Error404Page />,
+    //     },
+    //   ],
+    // },
   ]);
 
 export default Router;

@@ -23,7 +23,7 @@ const DashboardPage: FunctionComponent<DashboardPageProps> = ({}) => {
   const [tempStore, setTempStore] = useState<any>({});
   const [tempStoreLive, setTempStoreLive] = useState<any>({});
   const [selSport, setSelSport] = useState<number>(1);
-  const context = useFMcore();
+  // const context = useFMcore();
   const store = {
     availableDates: [],
     availableTimes: ["all", "1h", "2h", "3h", "6h", "12h"],
@@ -51,16 +51,17 @@ const DashboardPage: FunctionComponent<DashboardPageProps> = ({}) => {
     tourById: {},
   };
 
-  useEffect(() => {
-    const init = async () => {
-      const res = await context.FMcore.Sport.getSportCollection(1);
-      if (!res) return;
-      const { tempStore, tempStoreLive } = res;
-      setTempStore(tempStore);
-      setTempStoreLive(tempStoreLive);
-    };
-    init();
-  }, [context]);
+  // useEffect(() => {
+  //   // const init = async () => {
+  //   //   const res = await context.FMcore.Sport.getSportCollection(1);
+  //   //   if (!res) return;
+  //   //   const { tempStore, tempStoreLive } = res;
+  //   //   setTempStore(tempStore);
+  //   //   setTempStoreLive(tempStoreLive);
+  //   // };
+  //   const init = () => {};
+  //   init();
+  // }, [context]);
 
   return (
     <>
