@@ -55,18 +55,40 @@ interface MarketGroup {
 type MarketGroups = MarketGroup[];
 
 type AvailableDates = string[];
+type CategId = number;
+type CategsAllIds = CategId[];
+interface SportSelectedCategAllIds {
+  [sportId: SportId]: CategsAllIds;
+}
+
+type TourId = number;
+type TourAllIds = TourId[];
+interface Tour {}
+interface TourById {
+  [tourId: TourId]: Tour;
+}
+
+interface Categ {
+  name: string;
+  flag: string;
+  pos: number;
+  tourAllIds: TourAllIds;
+}
+interface CategById {
+  [categId: CategId]: Categ;
+}
 interface Collection {
   sportById: SportById;
   sportAllIds: SportAllIds;
   sportSelectedAllIds: SportSelectedAllIds;
   availableDates: AvailableDates;
   // availableTimes: string[];
-  // categById: object;
+  categById: CategById;
   marketAllIds: MarketAllIds;
   marketById: MarketById;
   marketGroups: MarketGroups;
   // matchById: object;
-  // sportSelectedCategAllIds: object;
+  sportSelectedCategAllIds: SportSelectedCategAllIds;
   // tourById: object;
 }
 interface HeaderMenuItem {
