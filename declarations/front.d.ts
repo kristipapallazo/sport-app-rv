@@ -63,7 +63,21 @@ interface SportSelectedCategAllIds {
 
 type TourId = number;
 type TourAllIds = TourId[];
-interface Tour {}
+
+type DateAllIds = string[];
+interface DateObj {}
+interface DateById {
+  [dateId: string]: MatchAllIds;
+}
+interface Tour {
+  name: string;
+  pos: number;
+  dateAllIds: DateAllIds;
+  dateById: DateById;
+  groupId: number | null;
+  categId: CategId;
+  matchAllIds: MatchAllIds;
+}
 interface TourById {
   [tourId: TourId]: Tour;
 }
@@ -77,6 +91,13 @@ interface Categ {
 interface CategById {
   [categId: CategId]: Categ;
 }
+
+type MatchId = string;
+type MatchAllIds = MatchId[];
+interface Match {}
+interface matchById {
+  [matchId: MatchId]: Match;
+}
 interface Collection {
   sportById: SportById;
   sportAllIds: SportAllIds;
@@ -89,7 +110,7 @@ interface Collection {
   marketGroups: MarketGroups;
   // matchById: object;
   sportSelectedCategAllIds: SportSelectedCategAllIds;
-  // tourById: object;
+  tourById: TourById;
 }
 interface HeaderMenuItem {
   name: string;

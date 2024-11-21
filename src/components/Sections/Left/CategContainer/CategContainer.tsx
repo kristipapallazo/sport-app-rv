@@ -10,7 +10,7 @@ interface CategMenuProps {}
 type MenuItem = Required<MenuProps>["items"][number];
 const CategMenu: FC<CategMenuProps> = (props) => {
   const {} = props;
-  const { sportSelectedCategAllIds, categById } = useCollection();
+  const { sportSelectedCategAllIds, categById, tourById } = useCollection();
   console.log("sportSelectedCategAllIds, categById :>> ", sportSelectedCategAllIds, categById);
 
   const sportId = 1;
@@ -18,7 +18,19 @@ const CategMenu: FC<CategMenuProps> = (props) => {
     const categ = categById[categId];
     const { name, tourAllIds } = categ;
 
-    return { key: categId, label: name, icon: false, children: [] };
+    const children: MenuItem[] = tourAllIds.map((tourId) => {
+      const tour = tourById[tourId];
+      const key = `${categId}_${tourId}`;
+      const child = { key, label: tour.name };
+      return child;
+    });
+
+    return {
+      key: categId,
+      label: name,
+      icon: false,
+      children,
+    };
   });
 
   const onClick: MenuProps["onClick"] = (info) => {
