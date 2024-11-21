@@ -11,7 +11,6 @@ type MenuItem = Required<MenuProps>["items"][number];
 const CategMenu: FC<CategMenuProps> = (props) => {
   const {} = props;
   const { sportSelectedCategAllIds, categById, tourById } = useCollection();
-  console.log("sportSelectedCategAllIds, categById :>> ", sportSelectedCategAllIds, categById);
 
   const sportId = 1;
   const items: MenuItem[] = sportSelectedCategAllIds[sportId].map((categId) => {

@@ -4,13 +4,14 @@
   justify-content: space-between;
   align-items: center;
   column-gap: 10px;
+  overflow: hidden;
 }
 
 .section {
-  flex: 1;
+  /* flex: 1; */
   height: 100%;
   padding: 10px;
-  /* width: 33.33%; */
+  overflow: hidden;
 }
 
 /* .left {

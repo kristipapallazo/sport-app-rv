@@ -1,6 +1,5 @@
-.main {
+.app {
   height: 100%;
-  /* width: 100%; */
   display: flex;
   flex-direction: column;
   row-gap: 10px;
@@ -13,7 +12,7 @@
   justify-content: space-between;
   align-items: center;
   column-gap: 10px;
-  flex-shrink: 1;
+  flex-shrink: 0; /* to not take extra height  */
 }
 
 /* Sport Menu */
@@ -23,6 +22,7 @@
   align-items: center;
   overflow: auto;
   column-gap: 5px;
+  flex: 1;
 }
 .selected {
   background-color: red;
@@ -32,4 +32,7 @@
   display: flex;
   flex-direction: column;
   background-color: red;
+}
+.date-model-btn {
+  flex-shrink: 0;
 }

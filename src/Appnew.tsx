@@ -12,7 +12,7 @@ import { store, persistor } from "./store/redux";
 import Router from "./router";
 
 import Loading from "./components/Loading/Loading";
-// import { FMcoreProvider } from "./contexts/FMcoreContext";
+import { FMcoreProvider } from "./contexts/FMcoreContext";
 import { StoreProvider } from "./contexts/StoreContext";
 
 const themeConfig = {
@@ -27,34 +27,34 @@ const reactQueryClient = new QueryClient();
 const App = () => {
   return (
     <HelmetProvider>
-      {/* <FMcoreProvider> */}
-      <ReduxProvider store={store}>
-        <PersistGate loading={<Loading />} persistor={persistor}>
-          {/* <AuthProvider> */}
-          <QueryClientProvider client={reactQueryClient}>
-            <StoreProvider>
-              <ConfigProvider theme={themeConfig}>
-                <BrowserRouter>
-                  <ConfigProvider
-                    modal={{
-                      classNames: {
-                        // content: "contentxxx",
-                        // body: "bodyxxx",
-                        // mask: "maskxxx",
-                        // wrapper: "wrapperxxx",
-                      },
-                    }}
-                  >
-                    <Router />
-                  </ConfigProvider>
-                </BrowserRouter>
-              </ConfigProvider>
-            </StoreProvider>
-          </QueryClientProvider>
-          {/* </AuthProvider> */}
-        </PersistGate>
-      </ReduxProvider>
-      {/* </FMcoreProvider> */}
+      <FMcoreProvider>
+        <ReduxProvider store={store}>
+          <PersistGate loading={<Loading />} persistor={persistor}>
+            {/* <AuthProvider> */}
+            <QueryClientProvider client={reactQueryClient}>
+              <StoreProvider>
+                <ConfigProvider theme={themeConfig}>
+                  <BrowserRouter>
+                    <ConfigProvider
+                      modal={{
+                        classNames: {
+                          // content: "contentxxx",
+                          // body: "bodyxxx",
+                          // mask: "maskxxx",
+                          // wrapper: "wrapperxxx",
+                        },
+                      }}
+                    >
+                      <Router />
+                    </ConfigProvider>
+                  </BrowserRouter>
+                </ConfigProvider>
+              </StoreProvider>
+            </QueryClientProvider>
+            {/* </AuthProvider> */}
+          </PersistGate>
+        </ReduxProvider>
+      </FMcoreProvider>
     </HelmetProvider>
   );
 };

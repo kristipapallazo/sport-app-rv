@@ -13,7 +13,11 @@ const DateBtn: FC<DateBtnProps> = (props) => {
     setSelectDateModalIsOpen((prev) => !prev);
   };
 
-  return <Button onClick={onClick}>date</Button>;
+  return (
+    <Button onClick={onClick} className="date-model-btn">
+      date
+    </Button>
+  );
 };
 
 export default DateBtn;
