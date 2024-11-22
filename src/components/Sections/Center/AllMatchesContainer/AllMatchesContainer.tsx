@@ -43,7 +43,7 @@ const MatchContent: FC<MatchContentProps> = (props) => {
   const { sportSelectedCategAllIds, categById, tourById, matchById } = useCollection();
   const classname = `${classes.matchContent}`;
   let items = [] as ReactNode[];
-  sportSelectedCategAllIds[selectedSport].slice(0).forEach((categId) => {
+  sportSelectedCategAllIds[selectedSport].slice(0, 2).forEach((categId) => {
     const categ = categById[categId];
     const { name: categName, tourAllIds } = categ;
 

@@ -9,7 +9,7 @@ type SportId = number;
 type SportById = {
   [id: SportId]: Sport;
 };
-type SportAllIds = string[];
+type SportAllIds = SportId[];
 type SportSelectedAllIds = SportId[];
 
 type OutcomeId = string;

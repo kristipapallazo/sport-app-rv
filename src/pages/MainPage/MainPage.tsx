@@ -34,12 +34,7 @@ const MainPage: FC<Props> = () => {
     <CollectionCtxProvider value={{ store }}>
       <div className="app">
         <AppHeader />
-        <MainHeader
-          sportAllIds={store.sportAllIds}
-          sportById={store.sportById}
-          selSport={selSport}
-          setSelectDateModalIsOpen={setSelectDateModalIsOpen}
-        />
+        <MainHeader selSport={selSport} setSelectDateModalIsOpen={setSelectDateModalIsOpen} />
         <Content>
           <Left />
           <Center />

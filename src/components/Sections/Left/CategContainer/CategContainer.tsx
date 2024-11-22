@@ -1,8 +1,9 @@
 import { FC } from "react";
-import classes from "./CategContainer.module.css";
 import { Menu } from "antd";
 import type { MenuProps } from "antd";
 import useCollection from "../../../../hooks/useCollection";
+import classes from "./CategContainer.module.css";
+import FLAG_ICONS_OBJ from "../../../Icon/FlagIcons";
 
 interface CategContainerProps {}
 interface CategMenuProps {}
@@ -23,11 +24,12 @@ const CategMenu: FC<CategMenuProps> = (props) => {
       const child = { key, label: tour.name };
       return child;
     });
+    const icon = FLAG_ICONS_OBJ[name];
 
     return {
       key: categId,
       label: name,
-      icon: false,
+      icon,
       children,
     };
   });
@@ -41,7 +43,7 @@ const CategMenu: FC<CategMenuProps> = (props) => {
       <Menu
         items={items}
         onClick={onClick}
-        style={{ width: 256 }}
+        style={{ width: "100%" }}
         // defaultSelectedKeys={["1"]}
         // defaultOpenKeys={["sub1"]}
         mode="inline"
@@ -50,12 +52,17 @@ const CategMenu: FC<CategMenuProps> = (props) => {
   );
 };
 
+interface LiveMenuProps {}
+const LiveMenu: FC<LiveMenuProps> = (props) => {
+  return <div style={{ flexShrink: 0 }}>live menu</div>;
+};
+
 const CategContainer: FC<CategContainerProps> = (props) => {
-  const {} = props;
-  const sport = "update it";
+  const sport = "sport_name";
   return (
     <div className={classes.container}>
-      <div style={{ flexShrink: 1 }}>{sport}</div>
+      <div className={classes.sportName}>{sport}</div>
+      <LiveMenu />
       <CategMenu />
     </div>
   );
