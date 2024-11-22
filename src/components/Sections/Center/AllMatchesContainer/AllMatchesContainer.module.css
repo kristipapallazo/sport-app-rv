@@ -3,16 +3,96 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  border-radius: inherit;
+  position: relative;
+  overflow: auto;
 }
 
 .header {
+  flex-shrink: 0;
   width: 100%;
+  display: flex;
+  column-gap: 2px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: black;
+  border-radius: inherit;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  /* padding: 5px; */
 }
 .headerChild {
+  flex-grow: 1;
   height: 100%;
   background-color: #306530;
   color: white;
+  padding: 5px;
 }
 
 .live {
+}
+
+/* Match Content */
+.matchContent {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+  /* padding: 0 5px; */
+  background-color: black;
+  color: white;
+  /* position: relative; */
+}
+/* Tour Container */
+.tourCont {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.tourHeader {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  background-color: #3f4754;
+  position: sticky;
+  top: 28px; /* 28px (width) + 5px padding */
+  z-index: 999;
+}
+/* Match List */
+.matchList {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  row-gap: 2px;
+}
+.match {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 2px;
+}
+.matchSection {
+  background-color: dimgray;
+  align-self: stretch;
+  /* flex: 1; */
+  /* height: 100% !important; */
+}
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.teamNamesSection {
+  width: 200px !important;
+  max-width: 200px !important;
+  flex-shrink: 0;
+}
+.timeSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }

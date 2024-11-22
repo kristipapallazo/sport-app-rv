@@ -7,7 +7,7 @@ interface SelectAppMenuProps {}
 interface AppConfigMenuProps {}
 const SelectAppMenu: FC<SelectAppMenuProps> = (props) => {
   const apps = ["SPORT", "LIVE", "CASINO-TT"].map((app) => {
-    return <Button>{app}</Button>;
+    return <Button key={app}>{app}</Button>;
   });
   return <div>{apps}</div>;
 };

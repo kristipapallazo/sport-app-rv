@@ -94,9 +94,27 @@ interface CategById {
 
 type MatchId = string;
 type MatchAllIds = MatchId[];
-interface Match {}
-interface matchById {
-  [matchId: MatchId]: Match;
+interface MatchTest {
+  home: string;
+  away: string;
+  categId: number;
+  code?: string | number;
+  date: string;
+  extra: { s_id: string };
+  feeds?: any;
+  groupId?: number;
+  live: number;
+  timestamp: number | string;
+  sportId: number;
+  tourId: number;
+  time: string;
+  link?: string;
+  cloneId?: string;
+  sid?: any;
+  map: any;
+}
+interface MatchById {
+  [matchId: MatchId]: MatchTest;
 }
 interface Collection {
   sportById: SportById;
@@ -108,7 +126,7 @@ interface Collection {
   marketAllIds: MarketAllIds;
   marketById: MarketById;
   marketGroups: MarketGroups;
-  // matchById: object;
+  matchById: MatchById;
   sportSelectedCategAllIds: SportSelectedCategAllIds;
   tourById: TourById;
 }
