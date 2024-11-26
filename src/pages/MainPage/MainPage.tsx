@@ -12,6 +12,8 @@ import AppHeader from "../../components/Header/AppHeader/AppHeader";
 
 interface Props {}
 
+let isInitial = true;
+
 const MainPage: FC<Props> = () => {
   const [store, setStore] = useState<Collection>(collection);
   const [selSport, setSelSport] = useState<SportId>(1);
