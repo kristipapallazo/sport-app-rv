@@ -11,14 +11,15 @@ interface CategMenuProps {}
 type MenuItem = Required<MenuProps>["items"][number];
 const CategMenu: FC<CategMenuProps> = (props) => {
   const {} = props;
-  const { sportSelectedCategAllIds, categById, tourById } = useCollection();
+  const { sportSelectedCategAllIds, categById, tourById } = useCollection()!;
 
   const sportId = 1;
   const items: MenuItem[] = sportSelectedCategAllIds[sportId].map((categId) => {
     const categ = categById[categId];
     const { name, tourAllIds } = categ;
 
-    const children: MenuItem[] = tourAllIds.map((tourId) => {
+    /* Todo: tourAllIds could be undefinded, solve it */
+    const children: MenuItem[] = tourAllIds!.map((tourId) => {
       const tour = tourById[tourId];
       const key = `${categId}_${tourId}`;
       const child = { key, label: tour.name };

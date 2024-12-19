@@ -1,6 +1,5 @@
-import React, { FC, ReactElement, ReactNode } from "react";
+import React, { FC, ReactNode } from "react";
 import classes from "./AllMatchesContainer.module.css";
-import { match } from "assert";
 import useCollection from "../../../../hooks/useCollection";
 
 interface AllMatchesContainerProps {}
@@ -40,14 +39,15 @@ const MatchSection: FC<MatchSectionProps> = (props) => {
 const MatchContent: FC<MatchContentProps> = (props) => {
   const {} = props;
   const selectedSport = 1;
-  const { sportSelectedCategAllIds, categById, tourById, matchById } = useCollection();
+  const { sportSelectedCategAllIds, categById, tourById, matchById } = useCollection()!;
   const classname = `${classes.matchContent}`;
   let items = [] as ReactNode[];
   sportSelectedCategAllIds[selectedSport].slice(0, 2).forEach((categId) => {
     const categ = categById[categId];
     const { name: categName, tourAllIds } = categ;
 
-    tourAllIds.forEach((tourId) => {
+    /* Todo: tourAllIds could be undefinded, solve it */
+    tourAllIds!.forEach((tourId) => {
       const tour = tourById[tourId];
       const { name: tourName, dateAllIds, dateById } = tour;
       const tourItem = dateAllIds.map((dateId) => {

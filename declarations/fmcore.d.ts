@@ -1,5 +1,5 @@
 type DomainConfigs = {
-  haUrl: string | undefined;
+  haUrl?: string | undefined;
   languages: string;
   [index: string]: string | number | undefined;
 };
@@ -82,19 +82,36 @@ type CollectionMapType = "sports" | "tours" | "markets" | "feed-clears";
 interface CollectionParams {
   [key: string]: string;
 }
+interface Sport {
+  id: number;
+  name: string;
+  pos: number;
+  hasLive?: boolean;
+  hasPrematch?: boolean;
+}
 
 interface SportMatch {
-  id: string;
+  id: eve;
   home: string;
   away: string;
   startTime: number;
-  sportId: number;
-  categId: number;
+  sportId: SportId;
+  categId: CategId;
+  categName: string;
   groupId: number;
   tourId: number;
+  tourName: string;
   isLive: boolean;
   code?: string;
   sid?: string[];
+  map?: { [index: string]: any };
+  /* extra props */
+  live: number;
+  timestamp: number;
+  date: string;
+  time: string;
+  feeds: any;
+  extra: { s_id: string };
 }
 
 interface SportCateg {
@@ -102,27 +119,25 @@ interface SportCateg {
   name: string;
   pos: number;
   sportId: number;
+  hasLive?: boolean;
+  hasPrematch?: boolean;
   cc?: string;
+  flag?: boolean; //same as cc, structure compatibility
+  tourAllIds?: TourAllIds; //structure compatibility
 }
 
 interface SportTour {
   id: number;
   name: string;
   pos: number;
-  categId: number;
   sportId: number;
-}
-
-interface IAdmin {
-  testAdmin(): void;
-  getActiveSports(live: number): Promise<ApiResponseType>;
-  getActiveEvents(sportId: number, live: number): Promise<ApiResponseType>;
-  getEventOddsRaw(eventId: string): Promise<ApiResponseTypeOdds>;
-  getTranslations(type: string, filter: string, lang: string): Promise<ApiResponseType>;
-  setTranslations(type: string, filter: string, lang: string, data: any): Promise<ApiResponseType>;
-  Collection: ICollection;
-  FeedCollection: IFeedCollection;
-  MapCollection: IMapCollection;
+  categId: number;
+  groupId: number;
+  hasLive?: boolean;
+  hasPrematch?: boolean;
+  dateAllIds: DateAllIds;
+  dateById: DateById;
+  matchAllIds: MatchAllIds;
 }
 
 interface MarketDto {
@@ -167,14 +182,28 @@ interface MergedConfiguration {
   id: number;
   config: Configuration;
   merged: Configuration;
+  configId?: string;
 }
 
 interface SportMarketOdd {
   specs: { [spec: string]: SportSpec };
-  sidp?: number;
+  sidp?: number | string;
 }
+interface SportMarketOddCalculated {
+  specs: { [spec: string]: SportSpecCalculated };
+  state?: number;
+  sidp?: number | string;
+  mbSbv?: string;
+}
+
 interface SportSpec {
   outcomes: { [outcomeId: string]: SportOdd };
+  state?: number;
+  lastStop?: number;
+}
+
+interface SportSpecCalculated {
+  outcomes: { [outcomeId: string]: SportOddCalculated };
   state?: number;
 }
 
@@ -183,7 +212,91 @@ interface SportOdd {
   state: number;
   pos?: number;
   name?: string;
-  prob?: number;
+  prob: number;
+}
+
+interface SportOddCalculated {
+  value: number | null;
+  state: number;
+}
+
+type RegisterDataType = {
+  sportId: string;
+  tourId: string;
+  feedId: number;
+  feedSportId: number;
+  live: number;
+  matches: string[];
+  bmId?: string;
+  mf?: string;
+};
+
+type MapEventDataType = {
+  sportId: string;
+  sourceId: string;
+  feedId: number;
+  feedSportId: number;
+  live: number;
+  eventId: string;
+  bmId?: string;
+  mf: string;
+};
+
+type UnregisterDataType = {
+  sportId: string;
+  live: number;
+  matches: string[];
+};
+
+interface getVirtualUrlParam {
+  /* TODO: define proper types later */
+  username: any;
+  currency: any;
+  loginType: any;
+  token: any;
+}
+
+interface IAdmin {
+  testAdmin(): void;
+  setSportModels(sportModels: number[]): ApiResponseType;
+  getActiveSports(live: number, shard?: string): Promise<ApiResponseType>;
+  getActiveEvents(sportId: number, live: number, shard?: string): Promise<ApiResponseType>;
+  getActiveMarkets(sportId: number, lang: string): Promise<ApiResponseType>;
+  getActiveCategs(sportId: number, live: number): ApiResponseType;
+  getActiveTours(categId: number, live: number): ApiResponseType;
+  getEventOddsRaw(eventId: string): Promise<ApiResponseTypeOdds>;
+  // getEventOdds(eventId: string): Promise<ApiResponseTypeOdds>;
+  getMarketConfig(eventId: string, marketId: string): Promise<ApiResponseType>;
+  getFeedActiveSports(feedId: string, live?: number): Promise<ApiResponseType>;
+  getFeedActiveEvents(feedId: string, sportId: number, live: number): Promise<ApiResponseType>;
+  getFeedActiveCategs(feedId: string, sportId: number, live: number): ApiResponseType;
+  getFeedActiveTours(feedId: string, categId: number, live: number): ApiResponseType;
+  getTranslations(type: string, filter: string, lang: string): Promise<ApiResponseType>;
+  setTranslations(type: string, filter: string, lang: string, data: any): Promise<ApiResponseType>;
+  getUserParameters(username: string): Promise<ApiResponseType>;
+  getMarketFilters(sportId: string): Promise<ApiResponseType>;
+  setMarketFilters(
+    id: number,
+    sportId: string,
+    name: string,
+    markets: number[],
+    tags: string[],
+    functions: string[],
+  ): Promise<ApiResponseType>;
+  addMarketFilters(
+    sportId: string,
+    name: string,
+    markets: number[],
+    tags: string[],
+    functions: string[],
+  ): Promise<ApiResponseType>;
+  removeMarketFilters(id: number, sportId: string): Promise<ApiResponseType>;
+  registerMatches(shard: string, data: RegisterDataType): Promise<ApiResponseType>;
+  unregisterMatches(shard: string, data: UnregisterDataType): Promise<ApiResponseType>;
+  mapMatch(shard: string, data: MapEventDataType): Promise<ApiResponseType>;
+  Collection: ICollection;
+  FeedCollection: IFeedCollection;
+  MapCollection: IMapCollection;
 }
 
 interface ICollection {
@@ -201,12 +314,15 @@ interface ICollection {
   addOutcome(data: OutcomeDto): Promise<ApiResponseType>;
   deleteOutcome(id: string): Promise<ApiResponseType>;
   getMarketsChanges(sportId: string): Promise<ApiResponseType>;
+  getSportParameters(id: string): Promise<ApiResponseType>;
+  deleteSportParameter(model: string, type: string, typeId: string, marketId: string): Promise<ApiResponseType>;
 }
 
 interface IFeedCollection {
   getSports(feedId: string): Promise<ApiResponseType>;
   getCategs(feedId: string, sportId: string): Promise<ApiResponseType>;
-  getTours(feedId: string, categId: string): Promise<ApiResponseType>;
+  getTours(feedId: string, sportId: string, categId: string): Promise<ApiResponseType>;
+  getMarkets(feedId: string, sportId: string): Promise<ApiResponseType>;
 }
 
 interface IMapCollection {
@@ -226,17 +342,18 @@ type ApiResponseType = {
 };
 
 interface ApiResponseTypeOdds extends ApiResponseType {
-  data: { [marketId: string]: SportMarketOdd };
+  data: { odds: { [marketId: string]: SportMarketOdd }; meta: { [index: string]: any } };
 }
 
 interface FMcore {
   init(): Promise<void>;
-  login(username: string, password: string, saveDevice?: boolean): Promise<ApiResponseType>;
+  login(username: string, password: string, saveDevice?: boolean): Promise<ApiResponseType | void>;
   logout(): void;
   getUser(): any;
   setApp(app: string): Promise<void>;
-  Admin: IAdmin;
-  Sport: ISport;
+  getDomainConfigs(): Promise<DomainConfigs>;
+  Admin?: IAdmin;
+  Sport?: ISport;
   // Boot?: Boot;
   // Add additional methods and properties here
 }
@@ -245,6 +362,7 @@ interface Window {
   gStore: any;
   FMcore: FMcore;
 }
+
 /* new */
 interface ISport {
   Collection: ICollection;
@@ -255,14 +373,18 @@ interface ISport {
 }
 type SportList = Sport[];
 type SportId = number;
-interface SportByIdTest {
+type CategId = number;
+type TourId = number;
+type MarketId = string;
+type EventId = string;
+interface SportById {
   [sportId: SportId]: Sport;
 }
-type SportAllIdsTest = SportId[];
-interface Bootstrap {
-  sportById: SportByIdTest;
-  sportAllIds: SportAllIdsTest;
-  categs: any[];
+type SportAllIds = SportId[];
+interface Bootstrap extends EventCollectionOldModel {
+  sportById: SportById;
+  sportAllIds: SportAllIds;
+  sportSelectedAllIds: SportAllIds;
 }
 interface ISportListManager {
   addSport(live: number, id: number, name: string, pos: number): void;
@@ -270,6 +392,113 @@ interface ISportListManager {
   getSports(live?: number, ignoreCache?: boolean): Promise<Sport[]>;
   getSportsFetchKeys(shard?: string): string[];
 }
-interface EventCollection {
-  categs: any[];
+interface CategById {
+  [categId: CategId]: SportCateg;
 }
+interface TourById {
+  [tourId: TourId]: SportTour;
+}
+interface MarketTr {
+  description?: string;
+  longName?: string;
+  shortName?: string;
+}
+interface MarketById {
+  [marketId: MarketId]: Market;
+}
+interface MarketTrById {
+  [marketId: MarketId]: MarketTr;
+}
+interface DateById {
+  [dateId: string]: MatchAllIds;
+}
+type DateAllIds = string[];
+type CategAllIds = CategId[];
+type TourAllIds = TourId[];
+type MarketAllIds = MarketId[];
+type OldStructureMarketAllIds = { [sportId: SportId]: MarketAllIds };
+type Categs = (SportCateg | undefined)[];
+type AllTours = (SportTour | undefined)[];
+type Events = SportMatch[];
+
+type EventAllIds = EventId[];
+interface EventById {
+  [eventId: EventId]: SportMatch;
+}
+
+interface SportMarkets {
+  [sportId: SportId]: MarketById;
+}
+/* translation */
+interface SportMarketsTr {
+  [sportId: SportId]: MarketTrById;
+}
+
+interface EventCollection {
+  categs: Categs;
+  categAllIds: CategAllIds;
+  allTours: AllTours;
+  markets: MarketById;
+  events: Events;
+  marketTranslation: MarketTrById;
+  availableDates: DateAllIds;
+}
+
+interface SportSelectedCategAllIds {
+  [sportId: SportId]: CategAllIds;
+}
+interface EventCollectionOldModel {
+  categById: CategById;
+  tourById: TourById;
+  sportSelectedCategAllIds: SportSelectedCategAllIds;
+  allMatches: EventAllIds;
+  matchById: EventById;
+  availableDates: DateAllIds;
+  marketAllIds: OldStructureMarketAllIds;
+  marketById: MarketById;
+  marketGroups?: any;
+  marketTranslation: MarketTrById;
+}
+
+/* betslip */
+type BetId = string;
+interface BetObj {
+  marketId: MarketId;
+  marketName: string;
+  marketResult: any;
+  sbvId: any;
+  outcomeId: any;
+  outcomeName: string;
+  odd: any;
+  sidp: number | string;
+}
+interface BetById {
+  [betId: BetId]: BetObj;
+}
+type BetAllIds = BetId[];
+interface BetslipMatch extends Pick<SportMatch, "home" | "away" | "code" | "live"> {
+  betAllIds: BetAllIds;
+  betById: BetById;
+  state?: number;
+}
+interface BetslipMatchById {
+  [matchId: EventId]: BetslipMatch;
+}
+interface InternalBetslipStore {
+  matchAllIds: Set<EventId>;
+  matchById: Map<EventId, BetslipMatch>;
+  totalBets: number;
+  totalOdds?: number;
+  totalOddsOrig?: number;
+  disabled?: boolean;
+  totalCols?: number;
+  totalOddsMin?: number;
+  totalOddsMax?: number;
+  totalOddsMinOrig?: number;
+  totalOddsMaxOrig?: number;
+  change_down?: boolean;
+}
+type BetslipStore = Omit<InternalBetslipStore, "matchAllIds" | "matchById"> & {
+  matchAllIds: MatchAllIds;
+  matchById: BetslipMatchById;
+};

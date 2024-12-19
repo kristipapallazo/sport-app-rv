@@ -12,7 +12,7 @@ interface SportMenuProps {
 
 const SportMenu: FC<SportMenuProps> = (props) => {
   const { selSport } = props;
-  const { sportById, sportAllIds } = useCollection();
+  const { sportById, sportAllIds } = useCollection()!;
 
   const selectedKeys = [selSport.toString()];
 

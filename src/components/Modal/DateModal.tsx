@@ -5,7 +5,7 @@ import useCollection from "../../hooks/useCollection";
 interface DateModalProps extends ModalProps {}
 const DateModal: FC<DateModalProps> = (props) => {
   const {} = props;
-  const { availableDates } = useCollection();
+  const { availableDates } = useCollection()!;
   const allAvailableDates = ["all", ...availableDates];
 
   const items = allAvailableDates.map((date) => {

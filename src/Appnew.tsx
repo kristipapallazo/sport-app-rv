@@ -14,6 +14,7 @@ import Router from "./router";
 import Loading from "./components/Loading/Loading";
 import { FMcoreProvider } from "./contexts/FMcoreContext";
 import { StoreProvider } from "./contexts/StoreContext";
+import CollectionCtxProvider from "./contexts/CollectionContext";
 
 const themeConfig = {
   algorithm: theme.defaultAlgorithm,
@@ -45,7 +46,9 @@ const App = () => {
                         },
                       }}
                     >
-                      <Router />
+                      <CollectionCtxProvider>
+                        <Router />
+                      </CollectionCtxProvider>
                     </ConfigProvider>
                   </BrowserRouter>
                 </ConfigProvider>
