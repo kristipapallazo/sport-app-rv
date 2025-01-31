@@ -34,24 +34,16 @@ const App = () => {
             {/* <AuthProvider> */}
             <QueryClientProvider client={reactQueryClient}>
               <StoreProvider>
-                <ConfigProvider theme={themeConfig}>
-                  <BrowserRouter>
-                    <ConfigProvider
-                      modal={{
-                        classNames: {
-                          // content: "contentxxx",
-                          // body: "bodyxxx",
-                          // mask: "maskxxx",
-                          // wrapper: "wrapperxxx",
-                        },
-                      }}
-                    >
-                      <CollectionCtxProvider>
-                        <Router />
-                      </CollectionCtxProvider>
-                    </ConfigProvider>
-                  </BrowserRouter>
-                </ConfigProvider>
+                <BrowserRouter>
+                  {/* <ConfigProvider
+                    theme={themeConfig}
+                    modal={{
+                      classNames: {},
+                    }}
+                  > */}
+                  <Router />
+                  {/* </ConfigProvider> */}
+                </BrowserRouter>
               </StoreProvider>
             </QueryClientProvider>
             {/* </AuthProvider> */}

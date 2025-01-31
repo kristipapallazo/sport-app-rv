@@ -9,4 +9,12 @@ const useCollection = (): Bootstrap | undefined => {
   return store;
 };
 
+export const useMainCtx = () => {
+  const ctxVal = useContext(collectionCtx);
+
+  if (!ctxVal) throw new Error("Error: Collection context value does not exist!");
+
+  return ctxVal;
+};
+
 export default useCollection;

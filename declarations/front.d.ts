@@ -135,4 +135,4 @@ interface HeaderMenuItem {
 }
 
 // /* global */
-// type setStateFn<S> = SetStateAction<S>;
+type SetStateFn<S> = SetStateAction<S>;

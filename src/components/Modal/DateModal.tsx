@@ -5,12 +5,12 @@ import useCollection from "../../hooks/useCollection";
 interface DateModalProps extends ModalProps {}
 const DateModal: FC<DateModalProps> = (props) => {
   const {} = props;
-  const { availableDates } = useCollection()!;
-  const allAvailableDates = ["all", ...availableDates];
+  // const { availableDates } = useCollection()!;
+  // const allAvailableDates = ["all", ...availableDates];
 
-  const items = allAvailableDates.map((date) => {
-    return <div key={date}>{date}</div>;
-  });
+  // const items = allAvailableDates.map((date) => {
+  //   return <div key={date}>{date}</div>;
+  // });
 
   return (
     <Modal styles={{ body: { height: "50%" } }} {...props}>
@@ -24,7 +24,7 @@ const DateModal: FC<DateModalProps> = (props) => {
           height: "100%",
         }}
       >
-        {items}
+        {/* {items} */}
       </div>
     </Modal>
   );

@@ -1,19 +1,27 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Menu } from "antd";
 import type { MenuProps } from "antd";
-import useCollection from "../../../../hooks/useCollection";
+import useCollection, { useMainCtx } from "../../../../hooks/useCollection";
 import classes from "./CategContainer.module.css";
 import FLAG_ICONS_OBJ from "../../../Icon/FlagIcons";
 
-interface CategContainerProps {}
-interface CategMenuProps {}
+interface CategContainerProps {
+  sportId: SportId;
+}
+interface CategMenuProps {
+  sportId: SportId;
+}
 
 type MenuItem = Required<MenuProps>["items"][number];
 const CategMenu: FC<CategMenuProps> = (props) => {
-  const {} = props;
+  const { sportId } = props;
   const { sportSelectedCategAllIds, categById, tourById } = useCollection()!;
 
-  const sportId = 1;
+  // const { sportId } = useMainCtx();
+
+  console.log("sportId :>> ", sportId);
+  console.log("sportSelectedCategAllIds :>> ", sportSelectedCategAllIds);
+
   const items: MenuItem[] = sportSelectedCategAllIds[sportId].map((categId) => {
     const categ = categById[categId];
     const { name, tourAllIds } = categ;
@@ -21,16 +29,18 @@ const CategMenu: FC<CategMenuProps> = (props) => {
     /* Todo: tourAllIds could be undefinded, solve it */
     const children: MenuItem[] = tourAllIds!.map((tourId) => {
       const tour = tourById[tourId];
+      if (!tour) alert(`${categId}, ${tourId}`);
+
       const key = `${categId}_${tourId}`;
+
       const child = { key, label: tour.name };
       return child;
     });
-    const icon = FLAG_ICONS_OBJ[name];
 
     return {
       key: categId,
       label: name,
-      icon,
+      icon: FLAG_ICONS_OBJ[name],
       children,
     };
   });
@@ -38,6 +48,10 @@ const CategMenu: FC<CategMenuProps> = (props) => {
   const onClick: MenuProps["onClick"] = (info) => {
     console.log("info :>> ", info);
   };
+
+  useEffect(() => {
+    console.log("inside categ comp uef");
+  }, []);
 
   return (
     <div className={classes["categ-menu"]}>
@@ -59,12 +73,13 @@ const LiveMenu: FC<LiveMenuProps> = (props) => {
 };
 
 const CategContainer: FC<CategContainerProps> = (props) => {
+  const { sportId } = props;
   const sport = "sport_name";
   return (
     <div className={classes.container}>
       <div className={classes.sportName}>{sport}</div>
       <LiveMenu />
-      <CategMenu />
+      <CategMenu sportId={sportId} />
     </div>
   );
 };

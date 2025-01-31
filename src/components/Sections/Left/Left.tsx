@@ -5,14 +5,16 @@ import CategContainer from "./CategContainer/CategContainer";
 
 interface LeftProps {
   className?: string;
+  sportId: SportId;
 }
 
 const Left: FC<LeftProps> = (props) => {
+  const { sportId } = props;
   const { className } = props;
   const classname = `${className} ${classes.left}`;
   return (
     <div className={classname}>
-      <SearchContainer /> <CategContainer />
+      <SearchContainer /> <CategContainer sportId={sportId} />
     </div>
   );
 };

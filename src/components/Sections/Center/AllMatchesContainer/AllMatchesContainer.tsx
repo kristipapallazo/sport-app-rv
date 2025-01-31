@@ -42,53 +42,57 @@ const MatchContent: FC<MatchContentProps> = (props) => {
   const { sportSelectedCategAllIds, categById, tourById, matchById } = useCollection()!;
   const classname = `${classes.matchContent}`;
   let items = [] as ReactNode[];
-  sportSelectedCategAllIds[selectedSport].slice(0, 2).forEach((categId) => {
-    const categ = categById[categId];
-    const { name: categName, tourAllIds } = categ;
 
-    /* Todo: tourAllIds could be undefinded, solve it */
-    tourAllIds!.forEach((tourId) => {
-      const tour = tourById[tourId];
-      const { name: tourName, dateAllIds, dateById } = tour;
-      const tourItem = dateAllIds.map((dateId) => {
-        const matchAllIds = dateById[dateId];
-        const matchList = matchAllIds.map((matchId) => {
-          const match = matchById[matchId];
-          const { home, away, time } = match;
-          return (
-            <div key={matchId} className={classes.match}>
-              <MatchSection className="timeSection" center={false}>
-                <span>{time}</span>
-                <span>{matchId}</span>
-              </MatchSection>
-              <MatchSection className="teamNamesSection" center={false}>
-                <span>{home}</span>
-                <span>{away}</span>
-              </MatchSection>
-              <MatchSection>odd</MatchSection>
-              <MatchSection>odd</MatchSection>
-              <MatchSection>odd</MatchSection>
-              <MatchSection>...</MatchSection>
-            </div>
-          );
-        });
+  // sportSelectedCategAllIds[selectedSport].slice(0, 2).forEach((categId) => {
+  //   const categ = categById[categId];
+  //   const { name: categName, tourAllIds } = categ;
 
-        const key = `${dateId}:${categId}:${tourId}`;
-        return (
-          <div key={key} className={classes.tourCont}>
-            <header className={classes.tourHeader}>
-              <span>{dateId}</span>
-              <span>{`${categId}/${tourId}`}</span>
-              <span>{`${categName}/${tourName}`}</span>
-            </header>
-            <div className={classes.matchList}>{matchList}</div>
-          </div>
-        );
-        // const tourItem = tourAllIds.map((tourId) => {});
-      });
-      items = [...items, ...tourItem];
-    });
-  });
+  //   /* Todo: tourAllIds could be undefinded, solve it */
+  //   tourAllIds!.forEach((tourId) => {
+  //     const tour = tourById[tourId];
+  //     const { name: tourName, dateAllIds, dateById } = tour;
+  //     console.log("dateAllIds :>> ", dateAllIds);
+  //     const tourItem = dateAllIds.map((dateId) => {
+  //       const matchAllIds = dateById[dateId];
+  //       console.log("dateById :>> ", dateById);
+  //       console.log("matchAllIds :>> ", matchAllIds);
+  //       const matchList = matchAllIds.map((matchId) => {
+  //         const match = matchById[matchId];
+  //         const { home, away, time } = match;
+  //         return (
+  //           <div key={matchId} className={classes.match}>
+  //             <MatchSection className="timeSection" center={false}>
+  //               <span>{time}</span>
+  //               <span>{matchId}</span>
+  //             </MatchSection>
+  //             <MatchSection className="teamNamesSection" center={false}>
+  //               <span>{home}</span>
+  //               <span>{away}</span>
+  //             </MatchSection>
+  //             <MatchSection>odd</MatchSection>
+  //             <MatchSection>odd</MatchSection>
+  //             <MatchSection>odd</MatchSection>
+  //             <MatchSection>...</MatchSection>
+  //           </div>
+  //         );
+  //       });
+
+  //       const key = `${dateId}:${categId}:${tourId}`;
+  //       return (
+  //         <div key={key} className={classes.tourCont}>
+  //           <header className={classes.tourHeader}>
+  //             <span>{dateId}</span>
+  //             <span>{`${categId}/${tourId}`}</span>
+  //             <span>{`${categName}/${tourName}`}</span>
+  //           </header>
+  //           <div className={classes.matchList}>{matchList}</div>
+  //         </div>
+  //       );
+  //       // const tourItem = tourAllIds.map((tourId) => {});
+  //     });
+  //     items = [...items, ...tourItem];
+  //   });
+  // });
   return <div className={classname}>{items}</div>;
 };
 

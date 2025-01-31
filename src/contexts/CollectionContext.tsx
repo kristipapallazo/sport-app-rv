@@ -1,39 +1,24 @@
-import React, { FC, ReactNode, createContext, useEffect, useState } from "react";
-import useFMcore from "../hooks/useFMcore";
+import React, { FC, ReactNode, createContext } from "react";
 
 interface DefaultValue {
   store: Bootstrap | undefined;
+  // sportId: SportId;
 }
-const defaultValue: DefaultValue = { store: undefined };
-// const defaultValue: DefaultValue = { store: {} as Collection };
+const defaultValue: DefaultValue = { store: undefined /* sportId: 1 */ };
 
 export const collectionCtx = createContext<DefaultValue>(defaultValue);
 
 interface CollectionCtxProviderProps {
   children: ReactNode;
+  store: Bootstrap | undefined;
+  // sportId: SportId;
 }
 
-let isInitial = true;
+// let isInitial = true;
 const CollectionCtxProvider: FC<CollectionCtxProviderProps> = (props) => {
-  const { children } = props;
-  const [store, setStore] = useState<Bootstrap | undefined>(undefined);
+  const { children, store /* sportId */ } = props;
 
-  const ctx = useFMcore();
-
-  useEffect(() => {
-    if (isInitial) {
-      const init = async () => {
-        const bootstrap = await ctx?.FMcore.Sport?.getBootstrap();
-        // const bootstrap = await ctx?.FMcore.Sport.getBootstrap();
-        console.log("bootstrap :>> ", bootstrap);
-        setStore(bootstrap);
-      };
-      init();
-      isInitial = false;
-    }
-  }, [ctx]);
-
-  return <collectionCtx.Provider value={{ store }}>{children}</collectionCtx.Provider>;
+  return <collectionCtx.Provider value={{ store /* sportId */ }}>{children}</collectionCtx.Provider>;
 };
 
 export default CollectionCtxProvider;

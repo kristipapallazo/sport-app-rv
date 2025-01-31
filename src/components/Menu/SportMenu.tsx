@@ -3,15 +3,17 @@ import useCollection from "../../hooks/useCollection";
 import { Menu, type MenuProps } from "antd";
 import { upperCase } from "lodash";
 import SPORT_ICONS_OBJ from "../Icon/SportIcon";
+import useFMcore from "../../hooks/useFMcore";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 interface SportMenuProps {
   selSport: SportId;
+  setSelSport: SetStateFn<SportId>;
 }
 
 const SportMenu: FC<SportMenuProps> = (props) => {
-  const { selSport } = props;
+  const { selSport, setSelSport } = props;
   const { sportById, sportAllIds } = useCollection()!;
 
   const selectedKeys = [selSport.toString()];
@@ -27,8 +29,8 @@ const SportMenu: FC<SportMenuProps> = (props) => {
   });
 
   const onClick: MenuProps["onClick"] = (e) => {
-    console.log("click ", e);
-    // setCurrent(e.key);
+    const key = +e.key;
+    setSelSport(key);
   };
 
   return (

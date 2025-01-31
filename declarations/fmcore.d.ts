@@ -1,6 +1,7 @@
 type DomainConfigs = {
   haUrl?: string | undefined;
   languages: string;
+
   [index: string]: string | number | undefined;
 };
 type UserParameters = {
@@ -353,7 +354,7 @@ interface FMcore {
   setApp(app: string): Promise<void>;
   getDomainConfigs(): Promise<DomainConfigs>;
   Admin?: IAdmin;
-  Sport?: ISport;
+  Interface?: IInterface;
   // Boot?: Boot;
   // Add additional methods and properties here
 }
@@ -364,14 +365,9 @@ interface Window {
 }
 
 /* new */
-interface ISport {
-  Collection: ICollection;
-  getSportCollection(sportId: number): any;
-  getSportList(): Promise<Sport[]>;
-  getBootstrap(): Promise<Bootstrap>;
-  initApp(): void;
-}
+
 type SportList = Sport[];
+type Live = 0 | 1;
 type SportId = number;
 type CategId = number;
 type TourId = number;
@@ -381,6 +377,7 @@ interface SportById {
   [sportId: SportId]: Sport;
 }
 type SportAllIds = SportId[];
+
 interface Bootstrap extends EventCollectionOldModel {
   sportById: SportById;
   sportAllIds: SportAllIds;
@@ -392,6 +389,7 @@ interface ISportListManager {
   getSports(live?: number, ignoreCache?: boolean): Promise<Sport[]>;
   getSportsFetchKeys(shard?: string): string[];
 }
+
 interface CategById {
   [categId: CategId]: SportCateg;
 }
@@ -438,9 +436,9 @@ interface EventCollection {
   categs: Categs;
   categAllIds: CategAllIds;
   allTours: AllTours;
-  markets: MarketById;
   events: Events;
-  marketTranslation: MarketTrById;
+  // markets: MarketById;
+  // marketTranslation: MarketTrById;
   availableDates: DateAllIds;
 }
 
@@ -502,3 +500,107 @@ type BetslipStore = Omit<InternalBetslipStore, "matchAllIds" | "matchById"> & {
   matchAllIds: MatchAllIds;
   matchById: BetslipMatchById;
 };
+
+interface RawBootstrap {
+  sp: any;
+  sl: any;
+  ep: any;
+  el: any;
+  mf: any;
+  cm: any;
+  cm100: any;
+  ctm: any;
+  ctm100: any;
+  cels: any;
+  celc: any;
+  celg: any;
+  celt: any;
+}
+type SportEventListData = Pick<RawBootstrap, "ep" | "el">;
+interface IRawBootstrapManager {
+  fetchRawBootstrap(sportId: SportId): Promise<RawBootstrap>;
+}
+interface ISportListManagerForSport {
+  getSports(live?: number): Sport[];
+  getSportsDestructured(live?: number): DestructuredSports;
+  getSportsFetchKeys(shard?: string): string[];
+}
+interface ISportEventListManager {
+  getEventCollection(sportId: SportId, live?: number): EventCollection;
+  calculateGlobalConfig(sportId: SportId, categId: CategId, groupId: number, tourId: TourId, type: number): any;
+  getEvents(sportId: SportId, live: number);
+  getEvent(id: EventId);
+  getCategs(sportId: SportId, live: number);
+  getCategAllIds(sportId: number, live: number);
+  getTours(categId: number, live: number);
+  getTourAllIds(categId: number, isLive: boolean);
+  getAllTours(sportId: number, live: number);
+  getEventHierarchy(eventId: string);
+  getEventMaps(eventId: string);
+  getAvailableDates(): DateAllIds;
+}
+interface ISportMarketManager {
+  getMarkets(sportId: SportId): MarketById;
+  getMarket(sportId: SportId, marketId: MarketId): Market | undefined;
+  getMarketsTr(sportId: number);
+  getMarketFilterList(mf: string);
+}
+interface ISport extends ISportMarketManager {
+  EventListManager: ISportEventListManager;
+  initApp(): void;
+
+  getRawBootstrap(): RawBootstrap;
+  getBootstrap(live?: number): Bootstrap;
+
+  /* Sport List Methods */
+  getSportList(live?: Live): SportList;
+  getSportListDestructured(live?: Live): DestructuredSports;
+
+  /* Event List Methods */
+  getEventCollection(sportId: SportId, live: number): EventCollection;
+  // calculateGlobalConfig(sportId: SportId, categId: CategId, groupId: number, tourId: TourId, type: number): any;
+  getEvents(sportId: SportId, live: number);
+  getEvent(id: EventId);
+  getCategs(sportId: SportId, live: number);
+  getCategAllIds(sportId: number, live: number);
+  getTours(categId: number, live: number);
+  getTourAllIds(categId: number, isLive: boolean);
+  getAllTours(sportId: number, live: number);
+  getEventHierarchy(eventId: string);
+  getEventMaps(eventId: string);
+  getAvailableDates(): DateAllIds;
+}
+interface IInterface {
+  // SportInstance: ISport | null;
+
+  /* General Methods */
+  initializeData(sportId?: SportId): Promise<void>;
+  setSportId(newSportId: SportId): Promise<void>;
+
+  getRawBootstrap(): RawBootstrap;
+  getBootstrap(live?: number): Bootstrap;
+
+  /* Sport List Methods */
+  getSportList(live?: Live): SportList;
+  getSportListDestructured(live?: Live): DestructuredSports;
+
+  /* Event List Methods */
+  getEventCollection(sportId: SportId, live: number): EventCollection;
+  getEvents(sportId: SportId, live: number);
+  getEvent(id: EventId);
+  getCategs(sportId: SportId, live: number);
+  getCategAllIds(sportId: number, live: number);
+  getTours(categId: number, live: number);
+  getTourAllIds(categId: number, isLive: boolean);
+  getAllTours(sportId: number, live: number);
+  getEventHierarchy(eventId: string);
+  getEventMaps(eventId: string);
+  getAvailableDates(): DateAllIds;
+
+  /* Market List Methods */
+}
+
+interface DestructuredSports {
+  sportAllIds: SportAllIds;
+  sportById: SportById;
+}
