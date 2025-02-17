@@ -1,22 +1,22 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import useCollection from "../../hooks/useCollection";
 import { Menu, type MenuProps } from "antd";
 import { upperCase } from "lodash";
 import SPORT_ICONS_OBJ from "../Icon/SportIcon";
-import useFMcore from "../../hooks/useFMcore";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 interface SportMenuProps {
-  selSport: SportId;
-  setSelSport: SetStateFn<SportId>;
+  selectedSports: SportAllIds;
+  setSelectedSports: SetStateFn<SportAllIds>;
+  setIsLoading: SetStateFn<boolean>;
 }
 
 const SportMenu: FC<SportMenuProps> = (props) => {
-  const { selSport, setSelSport } = props;
+  const { selectedSports, setSelectedSports, setIsLoading } = props;
   const { sportById, sportAllIds } = useCollection()!;
 
-  const selectedKeys = [selSport.toString()];
+  const memoizedSelectedKeys = useMemo(() => selectedSports.map((sport) => sport.toString()), [selectedSports]);
 
   const items: MenuItem[] = sportAllIds.map((id) => {
     const sportObj = sportById[id];
@@ -24,18 +24,30 @@ const SportMenu: FC<SportMenuProps> = (props) => {
     const label = upperCase(name);
     const icon = SPORT_ICONS_OBJ[name];
 
-    //   <span key={sportId} className={sportId === selSport ? "selected" : ""}>
     return { key: id, label, icon };
   });
 
-  const onClick: MenuProps["onClick"] = (e) => {
-    const key = +e.key;
-    setSelSport(key);
+  const onClick: MenuProps["onClick"] = ({ key: stringKey }) => {
+    const key = +stringKey;
+    setIsLoading(true);
+    setSelectedSports((prev: SportAllIds) => [...prev, key]);
+  };
+
+  const onDeselect: MenuProps["onDeselect"] = ({ selectedKeys }) => {
+    setIsLoading(true);
+    setSelectedSports(selectedKeys.map((k) => +k));
   };
 
   return (
     <div className="sport-menu">
-      <Menu items={items} selectedKeys={selectedKeys} onClick={onClick} mode="horizontal" />
+      <Menu
+        items={items}
+        selectedKeys={memoizedSelectedKeys}
+        onClick={onClick}
+        mode="horizontal"
+        multiple
+        onDeselect={onDeselect}
+      />
     </div>
   );
 };

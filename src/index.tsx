@@ -12,9 +12,11 @@ import "./Main.css";
 const root = createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
-  <React.StrictMode>
+  <>
+    {/* <React.StrictMode> */}
     <App />
-  </React.StrictMode>,
+    {/* </React.StrictMode> */},
+  </>,
 );
 
 reportWebVitals();

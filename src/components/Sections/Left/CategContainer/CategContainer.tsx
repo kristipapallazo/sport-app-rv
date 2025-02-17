@@ -22,6 +22,10 @@ const CategMenu: FC<CategMenuProps> = (props) => {
   console.log("sportId :>> ", sportId);
   console.log("sportSelectedCategAllIds :>> ", sportSelectedCategAllIds);
 
+  useEffect(() => {
+    console.log("sportId in categ :>> ", sportId);
+  }, [sportId]);
+
   const items: MenuItem[] = sportSelectedCategAllIds[sportId].map((categId) => {
     const categ = categById[categId];
     const { name, tourAllIds } = categ;

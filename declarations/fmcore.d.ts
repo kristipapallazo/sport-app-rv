@@ -369,6 +369,7 @@ interface Window {
 type SportList = Sport[];
 type Live = 0 | 1;
 type SportId = number;
+
 type CategId = number;
 type TourId = number;
 type MarketId = string;

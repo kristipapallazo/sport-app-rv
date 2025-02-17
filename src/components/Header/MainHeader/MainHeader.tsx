@@ -3,17 +3,18 @@ import DateBtn from "../../Button/DateButton";
 import SportMenu from "../../Menu/SportMenu";
 
 interface MainHeaderProps {
-  selSport: SportId;
-  setSelSport: SetStateFn<SportId>;
+  selectedSports: SportAllIds;
+  setSelectedSports: SetStateFn<SportAllIds>;
   setSelectDateModalIsOpen: Dispatch<SetStateAction<boolean>>;
+  setIsLoading: SetStateFn<boolean>;
 }
 
 const MainHeader: FC<MainHeaderProps> = (props) => {
-  const { selSport, setSelSport, setSelectDateModalIsOpen } = props;
+  const { setSelectedSports, selectedSports, setSelectDateModalIsOpen, setIsLoading } = props;
   return (
     <div className="main-header">
       <DateBtn setSelectDateModalIsOpen={setSelectDateModalIsOpen} />
-      <SportMenu selSport={selSport} setSelSport={setSelSport} />
+      <SportMenu setSelectedSports={setSelectedSports} selectedSports={selectedSports} setIsLoading={setIsLoading} />
     </div>
   );
 };
