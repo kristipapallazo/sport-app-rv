@@ -18,17 +18,15 @@ const MainPage: FC<Props> = () => {
   const [selectedSports, setSelectedSports] = useState<SportAllIds>([1]);
   const [selectDateModalIsOpen, setSelectDateModalIsOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  let [testVar, setTestVar] = useState<any>(sessionStorage.getItem("socket-update"));
   // const [selectDateModal, setSelectDateModal] = useState<string>("All");
 
-  testVar = "test";
   console.log("selectedSports :>> ", selectedSports);
+  console.log("store", store);
   const fmcore = useFMcore()!;
 
   // const handleDateModalClose = () => {
   //   // setSelectDateModalIsOpen(false);
   // };
-  console.log("testVar", testVar);
 
   const memoizedStore = useMemo(() => store, [store]);
   const memoizedSelectedSports = useMemo(() => selectedSports, [selectedSports]);
@@ -47,6 +45,7 @@ const MainPage: FC<Props> = () => {
   useEffect(() => {
     console.log("memoizedSelectedSports :>> ", memoizedSelectedSports);
     if (isInitial) {
+      /* Inject the Socket update event handler */
       document.addEventListener("get-socket-update" as any, function (e: CustomEvent) {
         handleSocketEventUpdate(e.detail);
       });
@@ -57,23 +56,15 @@ const MainPage: FC<Props> = () => {
     (async () => {
       const Interface = fmcore?.FMcore.Interface;
       if (!Interface) return;
-      await Interface.initializeData(memoizedSelectedSports[0]);
+      await Interface.initializeData(memoizedSelectedSports);
 
-      const rawBootstrap = Interface.getRawBootstrap();
+      // const rawBootstrap = Interface.getRawBootstrap();
       const bootstrap = Interface.getBootstrap();
-      console.log("rawBootstrap, bootstrap :>> ", rawBootstrap, bootstrap);
+      // console.log("rawBootstrap, bootstrap :>> ", rawBootstrap, bootstrap);
       setStore(bootstrap);
       setIsLoading(false);
     })();
   }, [fmcore?.FMcore.Interface, memoizedSelectedSports]);
-
-  useEffect(() => {
-    // if (isInitial) {
-    //   setTimeout(() => {
-    //     setSelSport(2);
-    //   }, 4000);
-    // }
-  }, []);
 
   // useEffect(() => {
 

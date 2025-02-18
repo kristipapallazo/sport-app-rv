@@ -575,7 +575,7 @@ interface IInterface {
   // SportInstance: ISport | null;
 
   /* General Methods */
-  initializeData(sportId?: SportId): Promise<void>;
+  initializeData(sportIds?: SportAllIds): Promise<void>;
   setSportId(newSportId: SportId): Promise<void>;
 
   getRawBootstrap(): RawBootstrap;
