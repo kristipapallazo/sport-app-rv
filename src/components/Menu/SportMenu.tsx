@@ -1,6 +1,6 @@
 import { FC, useMemo } from "react";
 import useCollection from "../../hooks/useCollection";
-import { Menu, type MenuProps } from "antd";
+import { Badge, Menu, type MenuProps } from "antd";
 import { upperCase } from "lodash";
 import SPORT_ICONS_OBJ from "../Icon/SportIcon";
 
@@ -14,14 +14,20 @@ interface SportMenuProps {
 
 const SportMenu: FC<SportMenuProps> = (props) => {
   const { selectedSports, setSelectedSports, setIsLoading } = props;
-  const { sportById, sportAllIds } = useCollection()!;
+  const { sportList } = useCollection()!;
+  const { sportById, sportAllIds } = sportList!;
 
   const memoizedSelectedKeys = useMemo(() => selectedSports.map((sport) => sport.toString()), [selectedSports]);
 
   const items: MenuItem[] = sportAllIds.map((id) => {
     const sportObj = sportById[id];
-    const { name } = sportObj;
-    const label = upperCase(name);
+    const { name, hasLive } = sportObj;
+
+    const label = (
+      <Badge count={hasLive ? 1 : null}>
+        <span>{upperCase(name)}</span>
+      </Badge>
+    );
     const icon = SPORT_ICONS_OBJ[name];
 
     return { key: id, label, icon };

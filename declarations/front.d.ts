@@ -134,5 +134,14 @@ interface HeaderMenuItem {
   name: string;
 }
 
+interface SportListDestructed {
+  sportById: SportById;
+  sportAllIds: SportAllIds;
+}
+interface SportsBootstrap {
+  sportList?: SportListDestructed;
+  [index: SportId]: Bootstrap;
+}
+
 // /* global */
 type SetStateFn<S> = SetStateAction<S>;

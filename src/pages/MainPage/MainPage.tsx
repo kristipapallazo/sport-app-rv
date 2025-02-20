@@ -9,12 +9,14 @@ import CollectionCtxProvider from "../../contexts/CollectionContext";
 // import DateModal from "../../components/Modal/DateModal";
 import AppHeader from "../../components/Header/AppHeader/AppHeader";
 import useFMcore from "../../hooks/useFMcore";
+import MainContextProvider from "../../contexts/MainContext";
 
 interface Props {}
 
 let isInitial = true;
+let sportListSaved = false;
 const MainPage: FC<Props> = () => {
-  const [store, setStore] = useState<Bootstrap | undefined>(undefined);
+  const [store, setStore] = useState<SportsBootstrap>({});
   const [selectedSports, setSelectedSports] = useState<SportAllIds>([1]);
   const [selectDateModalIsOpen, setSelectDateModalIsOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -42,6 +44,7 @@ const MainPage: FC<Props> = () => {
     }
   };
 
+  console.log("store", store);
   useEffect(() => {
     console.log("memoizedSelectedSports :>> ", memoizedSelectedSports);
     if (isInitial) {
@@ -56,12 +59,24 @@ const MainPage: FC<Props> = () => {
     (async () => {
       const Interface = fmcore?.FMcore.Interface;
       if (!Interface) return;
-      await Interface.initializeData(memoizedSelectedSports);
+      const sportId = memoizedSelectedSports[memoizedSelectedSports.length - 1];
+      await Interface.initializeData(sportId);
 
       // const rawBootstrap = Interface.getRawBootstrap();
-      const bootstrap = Interface.getBootstrap();
+      const live = 0;
+      const bootstrap = Interface.getBootstrap(sportId, live);
       // console.log("rawBootstrap, bootstrap :>> ", rawBootstrap, bootstrap);
-      setStore(bootstrap);
+      if (!sportListSaved && bootstrap.sportAllIds && bootstrap.sportById) {
+        const sportList: SportListDestructed = { sportById: bootstrap.sportById, sportAllIds: bootstrap.sportAllIds };
+        setStore((prev) => {
+          return { ...prev, sportList, [sportId]: bootstrap };
+        });
+        sportListSaved = true;
+      } else {
+        setStore((prev) => {
+          return { ...prev, [sportId]: bootstrap };
+        });
+      }
       setIsLoading(false);
     })();
   }, [fmcore?.FMcore.Interface, memoizedSelectedSports]);
@@ -119,22 +134,24 @@ const MainPage: FC<Props> = () => {
   // }, [selectedSports, fmcore]);
 
   return (
-    <>
+    <MainContextProvider selectedSports={selectedSports}>
       {isLoading ? (
         <div>isloading</div>
-      ) : store ? (
+      ) : (
         <CollectionCtxProvider store={memoizedStore} /* sportId={selectedSports} */>
           <>
             <div className="app">
               <AppHeader />
-              <MainHeader
-                selectedSports={memoizedSelectedSports}
-                setSelectedSports={setSelectedSports}
-                setIsLoading={setIsLoading}
-                setSelectDateModalIsOpen={setSelectDateModalIsOpen}
-              />
+              {store.sportList && (
+                <MainHeader
+                  selectedSports={memoizedSelectedSports}
+                  setSelectedSports={setSelectedSports}
+                  setIsLoading={setIsLoading}
+                  setSelectDateModalIsOpen={setSelectDateModalIsOpen}
+                />
+              )}
               <Content>
-                <Left sportId={selectedSports[0]} />
+                <Left />
                 <>{/* <Center /> */}</>
 
                 <Right />
@@ -145,10 +162,8 @@ const MainPage: FC<Props> = () => {
             )} */}
           </>
         </CollectionCtxProvider>
-      ) : (
-        <div>no data</div>
       )}
-    </>
+    </MainContextProvider>
   );
 };
 

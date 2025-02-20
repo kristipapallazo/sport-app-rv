@@ -8,7 +8,9 @@ interface AllMatchesHeaderProps {
   hasSbv?: boolean;
   isLive?: boolean;
 }
-interface MatchContentProps {}
+interface MatchContentProps {
+  sportId: SportId;
+}
 const AllMatchesHeader: FC<AllMatchesHeaderProps> = (props) => {
   const { name, hasSbv, isLive } = props;
   const classname = `${classes.header} ${classes.isLive}`;
@@ -37,9 +39,8 @@ const MatchSection: FC<MatchSectionProps> = (props) => {
   );
 };
 const MatchContent: FC<MatchContentProps> = (props) => {
-  const {} = props;
-  const selectedSport = 1;
-  const { sportSelectedCategAllIds, categById, tourById, matchById } = useCollection()!;
+  const { sportId } = props;
+  // const { sportSelectedCategAllIds, categById, tourById, matchById } = useCollection()!;
   const classname = `${classes.matchContent}`;
   let items = [] as ReactNode[];
 
@@ -100,7 +101,7 @@ const AllMatchesContainer: FC<AllMatchesContainerProps> = (props) => {
   return (
     <div className={classes.cont}>
       <AllMatchesHeader name="Sport Live" hasSbv={true} isLive={true} />
-      <MatchContent />
+      {/* <MatchContent /> */}
     </div>
   );
 };

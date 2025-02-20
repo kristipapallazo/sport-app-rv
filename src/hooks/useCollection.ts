@@ -1,20 +1,13 @@
 import { useContext } from "react";
 import { collectionCtx } from "../contexts/CollectionContext";
 
-const useCollection = (): Bootstrap | undefined => {
+const useCollection = (): SportsBootstrap => {
   const ctxVal = useContext(collectionCtx);
-  if (!ctxVal) throw new Error("Error: Collection context value does not exist!");
+  console.log("ctxVal", ctxVal);
+  // if (!ctxVal) throw new Error("Error: Collection context value does not exist!");
   const { store } = ctxVal;
 
   return store;
-};
-
-export const useMainCtx = () => {
-  const ctxVal = useContext(collectionCtx);
-
-  if (!ctxVal) throw new Error("Error: Collection context value does not exist!");
-
-  return ctxVal;
 };
 
 export default useCollection;

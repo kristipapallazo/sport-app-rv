@@ -357,6 +357,7 @@ interface FMcore {
   Interface?: IInterface;
   // Boot?: Boot;
   // Add additional methods and properties here
+  // u_logout(haUrl: string, rToken: string): Promise<ApiResponseType | void>;
 }
 
 interface Window {
@@ -369,7 +370,6 @@ interface Window {
 type SportList = Sport[];
 type Live = 0 | 1;
 type SportId = number;
-
 type CategId = number;
 type TourId = number;
 type MarketId = string;
@@ -502,6 +502,21 @@ type BetslipStore = Omit<InternalBetslipStore, "matchAllIds" | "matchById"> & {
   matchById: BetslipMatchById;
 };
 
+type RawBootstrapKeys =
+  | "sp"
+  | "sl"
+  | "ep"
+  | "el"
+  | "mf"
+  | "cm"
+  | "cm100"
+  | "ctm"
+  | "ctm100"
+  | "cels"
+  | "celc"
+  | "celg"
+  | "celt";
+
 interface RawBootstrap {
   sp: any;
   sl: any;
@@ -517,11 +532,15 @@ interface RawBootstrap {
   celg: any;
   celt: any;
 }
+type AllSportRawBootstrap = {
+  [sportId: SportId]: RawBootstrap;
+};
 type SportEventListData = Pick<RawBootstrap, "ep" | "el">;
 interface IRawBootstrapManager {
-  fetchRawBootstrap(sportId: SportId): Promise<RawBootstrap>;
+  fetchRawBootstrap(sportId: SportId): Promise<RawBootstrap | undefined>;
 }
 interface ISportListManagerForSport {
+  initialized: boolean;
   getSports(live?: number): Sport[];
   getSportsDestructured(live?: number): DestructuredSports;
   getSportsFetchKeys(shard?: string): string[];
@@ -541,17 +560,19 @@ interface ISportEventListManager {
   getAvailableDates(): DateAllIds;
 }
 interface ISportMarketManager {
+  addSportMarkets(sportId: SportId, data: any);
   getMarkets(sportId: SportId): MarketById;
   getMarket(sportId: SportId, marketId: MarketId): Market | undefined;
   getMarketsTr(sportId: number);
   getMarketFilterList(mf: string);
 }
-interface ISport extends ISportMarketManager {
+interface ISport extends Omit<ISportMarketManager, "addSportMarkets"> {
   EventListManager: ISportEventListManager;
   initApp(): void;
 
+  newSportId(sportId: SportId, data: RawBootstrap);
   getRawBootstrap(): RawBootstrap;
-  getBootstrap(live?: number): Bootstrap;
+  getBootstrap(sportId: SportId, live?: Live): Bootstrap;
 
   /* Sport List Methods */
   getSportList(live?: Live): SportList;
@@ -575,11 +596,12 @@ interface IInterface {
   // SportInstance: ISport | null;
 
   /* General Methods */
-  initializeData(sportIds?: SportAllIds): Promise<void>;
-  setSportId(newSportId: SportId): Promise<void>;
+  initializeData(sportId?: SportId): Promise<void>;
+  // initializeData(sportId?: SportId): Promise<void>;
+  // setSportId(newSportId: SportId): Promise<void>;
 
   getRawBootstrap(): RawBootstrap;
-  getBootstrap(live?: number): Bootstrap;
+  getBootstrap(sportId: SportId, live?: number): Bootstrap;
 
   /* Sport List Methods */
   getSportList(live?: Live): SportList;
@@ -604,4 +626,131 @@ interface IInterface {
 interface DestructuredSports {
   sportAllIds: SportAllIds;
   sportById: SportById;
+}
+
+interface IFinance {
+  getUserStore(): Promise<ApiResponseTypeUserStore>;
+  getDomainConfigs(): Promise<ApiResponseType>;
+  getInitTickets(): Promise<ApiResponseTypeInitTickets>;
+  getNetwork(): Promise<ApiResponseTypeNetwork>;
+  getUserInfo(): Promise<ApiResponseTypeUserInfo>;
+
+  getChildren(m_id: number, start?: number): Promise<ApiResponseTypeChildren>;
+
+  getNetAccounting(filters: AccountingFilters): Promise<ApiResponseTypeNetAccounting>;
+  getSelfAccounting(filters: AccountingFilters): Promise<ApiResponseTypeSelfAccounting>;
+  getTransactions(filters: AccountingFilters): Promise<ApiResponseTypeTransactions>;
+  getAccountingHeaders(): Promise<ApiResponseTypeAccountReport>;
+
+  getTickets(filters: TicketsFilters): Promise<ApiResponseType>;
+  getNetTickets(filters: TicketsFilters): Promise<ApiResponseType>;
+  getSelfTickets(filters: TicketsFilters): Promise<ApiResponseType>;
+  getTicket(ticket: number | string, search: boolean): Promise<ApiResponseTypeTicket>;
+
+  getSports(): Promise<ApiResponseType>;
+  getCategories(sportId: string): Promise<ApiResponseType>;
+  getGroups(sportId: string): Promise<ApiResponseType>;
+  getTournaments(categId: string): Promise<ApiResponseType>;
+  getToursFromGroup(groupId: string): Promise<ApiResponseType>;
+  getConfigurations(
+    modelId: nmber,
+    type: string,
+    typeId: number,
+    eventId?: string,
+    isLive?: boolean,
+  ): Promise<ApiResponseType>;
+
+  getFunds(username: string, currency: number): Promise<ApiResponseType>;
+  setBalance(data: BalanceData, editAction: string): Promise<ApiResponseType>;
+  setOverdraft(data: BalanceData, editAction: string): Promise<ApiResponseType>;
+  setManagerType(m_id: number, type: string, username: string): Promise<ApiResponseType>;
+  addManager(data: NewManagerData): Promise<ApiResponseType>;
+  addUser(data: NewUserData): Promise<ApiResponseType>;
+
+  getAuthParameters(m_id: number, username: string): Promise<ApiResponseType>;
+  getAuthNetParameters(m_id: number, username: string): Promise<ApiResponseType>;
+
+  getBetParameters(m_id: number): Promise<ApiResponseType>;
+
+  searchUsers(value: string): Promise<ApiResponseType>;
+  resetPassword(data: resetPasswordData): Promise<ApiResponseType>;
+  changePassword(data: changePasswordData): Promise<ApiResponseType>;
+  deleteUsers(m_id: string, delete_code: string, username?: string): Promise<ApiResponseType>;
+  moveManager(source_id: string, destination_id: string, username?: string): Promise<ApiResponseType>;
+  moveUsers(source_id: string, destination_id: string): Promise<ApiResponseType>;
+  produceVoucher(currency: string, value: string): Promise<ApiResponseType>;
+  getVoucher(voucher: string): Promise<ApiResponseType>;
+  consumeVoucher(voucher: string): Promise<ApiResponseType>;
+  getVouchers(view: string, voucher_type: string): Promise<ApiResponseType>;
+  approveVoucher(voucher: string, voucher_type: string): Promise<ApiResponseType>;
+  rejectVoucher(voucher: string, voucher_type: string): Promise<ApiResponseType>;
+  // getJackpotWinners(): Promise<ApiResponseType>;
+}
+
+interface AccountingFilters {
+  m_id: string;
+  currency: number;
+  start_date?: string;
+  end_date?: string;
+  start?: number;
+  rows?: number;
+  order: string;
+  direction: string;
+  types?: number[];
+  trx_types?: number[];
+  selectedTrxType?: string;
+  view?: string;
+  username?: string;
+}
+
+interface TicketsFilters {
+  m_id: string;
+  currency: number;
+  start_date?: string;
+  end_date?: string;
+  start: number;
+  rows: number;
+  order: string;
+  direction: string;
+  view: string;
+  state: number;
+  type: number;
+  bonus: number;
+  selections: number;
+  username: "string";
+}
+
+interface BalanceData {
+  username: string;
+  currency: string;
+  value: string;
+  description?: string;
+  type: string;
+}
+
+interface NewManagerData {
+  type: number;
+  username: string;
+  parent_name: string;
+  password: string;
+  confirm_password: string;
+}
+interface NewUserData {
+  username: string;
+  parent_name: string;
+  password: string;
+  confirm_password: string;
+}
+
+interface resetPasswordData {
+  username: string;
+  new_pass: string;
+  type: string;
+  mng_id: string;
+}
+
+interface changePasswordData {
+  old_pass: string;
+  new_pass: string;
+  confirm_new: string;
 }

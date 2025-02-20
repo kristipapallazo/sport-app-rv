@@ -1,24 +1,22 @@
 import React, { FC, ReactNode, createContext } from "react";
 
 interface DefaultValue {
-  store: Bootstrap | undefined;
-  // sportId: SportId;
+  store: SportsBootstrap;
 }
-const defaultValue: DefaultValue = { store: undefined /* sportId: 1 */ };
+const defaultValue: DefaultValue = { store: {} };
 
 export const collectionCtx = createContext<DefaultValue>(defaultValue);
 
 interface CollectionCtxProviderProps {
   children: ReactNode;
-  store: Bootstrap | undefined;
-  // sportId: SportId;
+  store: SportsBootstrap;
 }
 
 // let isInitial = true;
 const CollectionCtxProvider: FC<CollectionCtxProviderProps> = (props) => {
-  const { children, store /* sportId */ } = props;
+  const { children, store } = props;
 
-  return <collectionCtx.Provider value={{ store /* sportId */ }}>{children}</collectionCtx.Provider>;
+  return <collectionCtx.Provider value={{ store }}>{children}</collectionCtx.Provider>;
 };
 
 export default CollectionCtxProvider;
