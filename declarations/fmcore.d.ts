@@ -384,6 +384,10 @@ interface Bootstrap extends EventCollectionOldModel {
   sportAllIds: SportAllIds;
   sportSelectedAllIds: SportAllIds;
 }
+interface FullBootstrap {
+  p: Bootstrap;
+  l: Bootstrap;
+}
 interface ISportListManager {
   addSport(live: number, id: number, name: string, pos: number): void;
   loadSports(): Promise<void>;
@@ -546,6 +550,7 @@ interface ISportListManagerForSport {
   getSportsFetchKeys(shard?: string): string[];
 }
 interface ISportEventListManager {
+  loadNewSportEvents(sportId: SportId, data: SportEventsListManager);
   getEventCollection(sportId: SportId, live?: number): EventCollection;
   calculateGlobalConfig(sportId: SportId, categId: CategId, groupId: number, tourId: TourId, type: number): any;
   getEvents(sportId: SportId, live: number);
@@ -571,6 +576,9 @@ interface ISport extends Omit<ISportMarketManager, "addSportMarkets"> {
   initApp(): void;
 
   newSportId(sportId: SportId, data: RawBootstrap);
+
+  /* Bootstrap */
+  getFullBootstrap(sportId: SportId): FullBootstrap;
   getRawBootstrap(): RawBootstrap;
   getBootstrap(sportId: SportId, live?: Live): Bootstrap;
 
@@ -600,6 +608,7 @@ interface IInterface {
   // initializeData(sportId?: SportId): Promise<void>;
   // setSportId(newSportId: SportId): Promise<void>;
 
+  getFullBootstrap(sportId: SportId): FullBootstrap;
   getRawBootstrap(): RawBootstrap;
   getBootstrap(sportId: SportId, live?: number): Bootstrap;
 

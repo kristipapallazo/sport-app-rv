@@ -1,15 +1,15 @@
 import React, { FC, ReactNode, createContext } from "react";
 
 interface DefaultValue {
-  store: SportsBootstrap;
+  store: GlobalStore | undefined;
 }
-const defaultValue: DefaultValue = { store: {} };
+const defaultValue: DefaultValue = { store: undefined };
 
 export const collectionCtx = createContext<DefaultValue>(defaultValue);
 
 interface CollectionCtxProviderProps {
   children: ReactNode;
-  store: SportsBootstrap;
+  store: GlobalStore | undefined;
 }
 
 // let isInitial = true;

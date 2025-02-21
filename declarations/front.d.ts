@@ -138,9 +138,9 @@ interface SportListDestructed {
   sportById: SportById;
   sportAllIds: SportAllIds;
 }
-interface SportsBootstrap {
-  sportList?: SportListDestructed;
-  [index: SportId]: Bootstrap;
+interface GlobalStore {
+  [sportId: SportId]: FullBootstrap;
+  sportList: SportListDestructed;
 }
 
 // /* global */

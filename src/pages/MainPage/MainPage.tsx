@@ -10,13 +10,14 @@ import CollectionCtxProvider from "../../contexts/CollectionContext";
 import AppHeader from "../../components/Header/AppHeader/AppHeader";
 import useFMcore from "../../hooks/useFMcore";
 import MainContextProvider from "../../contexts/MainContext";
+import { all } from "axios";
 
 interface Props {}
 
 let isInitial = true;
 let sportListSaved = false;
 const MainPage: FC<Props> = () => {
-  const [store, setStore] = useState<SportsBootstrap>({});
+  const [store, setStore] = useState<GlobalStore | undefined>(undefined);
   const [selectedSports, setSelectedSports] = useState<SportAllIds>([1]);
   const [selectDateModalIsOpen, setSelectDateModalIsOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -62,21 +63,27 @@ const MainPage: FC<Props> = () => {
       const sportId = memoizedSelectedSports[memoizedSelectedSports.length - 1];
       await Interface.initializeData(sportId);
 
-      // const rawBootstrap = Interface.getRawBootstrap();
-      const live = 0;
-      const bootstrap = Interface.getBootstrap(sportId, live);
-      // console.log("rawBootstrap, bootstrap :>> ", rawBootstrap, bootstrap);
-      if (!sportListSaved && bootstrap.sportAllIds && bootstrap.sportById) {
-        const sportList: SportListDestructed = { sportById: bootstrap.sportById, sportAllIds: bootstrap.sportAllIds };
-        setStore((prev) => {
-          return { ...prev, sportList, [sportId]: bootstrap };
+      const fullBootstrap = Interface.getFullBootstrap(sportId);
+      const testCategs = (fullBootstrap: FullBootstrap) => {
+        const {
+          l: { sportSelectedCategAllIds: sportSelectedCategAllIdsLive },
+          p: { sportSelectedCategAllIds },
+        } = fullBootstrap;
+        const allCategs = sportSelectedCategAllIds[sportId];
+        const allCategsLive = sportSelectedCategAllIdsLive[sportId];
+        console.log("allCategs, allCategsLive :>> ", allCategs, allCategsLive);
+        allCategsLive.forEach((id) => {
+          if (allCategs.includes(id)) {
+            // alert(id);
+          }
         });
-        sportListSaved = true;
-      } else {
-        setStore((prev) => {
-          return { ...prev, [sportId]: bootstrap };
-        });
-      }
+      };
+      testCategs(fullBootstrap);
+      console.log("fullBootstrap", fullBootstrap);
+      const sportList = Interface.getSportListDestructured();
+      console.log("sportList :>> ", sportList);
+      setStore({ sportList, [sportId]: fullBootstrap });
+
       setIsLoading(false);
     })();
   }, [fmcore?.FMcore.Interface, memoizedSelectedSports]);
@@ -138,25 +145,25 @@ const MainPage: FC<Props> = () => {
       {isLoading ? (
         <div>isloading</div>
       ) : (
-        <CollectionCtxProvider store={memoizedStore} /* sportId={selectedSports} */>
+        <CollectionCtxProvider store={memoizedStore}>
           <>
-            <div className="app">
-              <AppHeader />
-              {store.sportList && (
+            {store?.sportList && (
+              <div className="app">
+                <AppHeader />
                 <MainHeader
                   selectedSports={memoizedSelectedSports}
                   setSelectedSports={setSelectedSports}
                   setIsLoading={setIsLoading}
                   setSelectDateModalIsOpen={setSelectDateModalIsOpen}
                 />
-              )}
-              <Content>
-                <Left />
-                <>{/* <Center /> */}</>
+                <Content>
+                  <Left />
+                  <>{/* <Center /> */}</>
 
-                <Right />
-              </Content>
-            </div>
+                  <>{/* <Right /> */}</>
+                </Content>
+              </div>
+            )}
             {/* {selectDateModalIsOpen && (
               <DateModal open={selectDateModalIsOpen} onCancel={handleDateModalClose} title="Available dates" />
             )} */}
