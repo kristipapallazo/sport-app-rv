@@ -47,46 +47,34 @@ const MainPage: FC<Props> = () => {
 
   console.log("store", store);
   useEffect(() => {
-    console.log("memoizedSelectedSports :>> ", memoizedSelectedSports);
-    if (isInitial) {
-      /* Inject the Socket update event handler */
-      document.addEventListener("get-socket-update" as any, function (e: CustomEvent) {
-        handleSocketEventUpdate(e.detail);
-      });
-
-      isInitial = false;
-    }
-
     (async () => {
+      console.log("memoizedSelectedSports :>> ", memoizedSelectedSports);
       const Interface = fmcore?.FMcore.Interface;
       if (!Interface) return;
       const sportId = memoizedSelectedSports[memoizedSelectedSports.length - 1];
       await Interface.initializeData(sportId);
 
-      const fullBootstrap = Interface.getFullBootstrap(sportId);
-      const testCategs = (fullBootstrap: FullBootstrap) => {
-        const {
-          l: { sportSelectedCategAllIds: sportSelectedCategAllIdsLive },
-          p: { sportSelectedCategAllIds },
-        } = fullBootstrap;
-        const allCategs = sportSelectedCategAllIds[sportId];
-        const allCategsLive = sportSelectedCategAllIdsLive[sportId];
-        console.log("allCategs, allCategsLive :>> ", allCategs, allCategsLive);
-        allCategsLive.forEach((id) => {
-          if (allCategs.includes(id)) {
-            // alert(id);
-          }
+      if (isInitial) {
+        /* Inject the Socket update event handler */
+        document.addEventListener("get-socket-update" as any, function (e: CustomEvent) {
+          handleSocketEventUpdate(e.detail);
         });
-      };
-      testCategs(fullBootstrap);
+        const sportList = Interface.getSportListDestructured();
+        console.log("sportList", sportList);
+        setStore((prev) => (prev ? { ...prev, sportList } : { sportList }));
+
+        isInitial = false;
+      }
+
+      const fullBootstrap = Interface.getFullBootstrap(sportId);
       console.log("fullBootstrap", fullBootstrap);
-      const sportList = Interface.getSportListDestructured();
-      console.log("sportList :>> ", sportList);
-      setStore({ sportList, [sportId]: fullBootstrap });
+      setStore((prev) => (prev ? { ...prev, [sportId]: fullBootstrap } : undefined));
+      // setStore({ sportList, [sportId]: fullBootstrap });
 
       setIsLoading(false);
     })();
   }, [fmcore?.FMcore.Interface, memoizedSelectedSports]);
+  //adminaccess
 
   // useEffect(() => {
 

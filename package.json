@@ -13,7 +13,7 @@
     "url": "https://github.com/bit-apps/boilerplate-react-ts/issues"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

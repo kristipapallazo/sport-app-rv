@@ -8,7 +8,6 @@ import useMainCtx from "../../../../hooks/useMainCtx";
 import { upperCase } from "lodash";
 import SPORT_ICONS_OBJ from "../../../Icon/SportIcon";
 import { IoMdTime } from "react-icons/io";
-import { MenuItemType } from "antd/es/menu/interface";
 
 interface CategContainerProps {}
 interface CategMenuProps {}
@@ -34,7 +33,7 @@ const categMenuItem = (sportId: SportId, bootstrap: Bootstrap, l: "live" | "prem
     /* Todo: tourAllIds could be undefinded, solve it */
     const children: MenuItem[] = tourAllIds!.map((tourId) => {
       const tour = tourById[tourId];
-      if (!tour) alert(`${categId}, ${tourId}`);
+      if (!tour) alert(`${l} ${categId}, ${tourId}`);
 
       const childKey = `${key}_${tourId}`;
 
@@ -63,24 +62,21 @@ const CategMenu: FC<CategMenuProps> = (props) => {
   const { selectedSports } = useMainCtx();
   const store = useCollection()!;
   const { sportList } = store;
+  console.log("store, selectedSports", store, selectedSports);
 
   const items: MenuItem[] = selectedSports.map((sportId) => {
     const fullBootstrap = store[sportId];
     console.log("store", store);
     console.log("fullBootstrap", fullBootstrap);
-    const { p, l } = fullBootstrap;
+    // const { p, l } = fullBootstrap;
 
     const sportObj = sportList.sportById[sportId];
     const { name, hasLive, hasPrematch } = sportObj;
     const label = upperCase(name);
     const icon = SPORT_ICONS_OBJ[name];
 
-    const liveChildren = l ? categMenuItem(sportId, l, "live") : [];
-    // const liveChildren: MenuItem[] = [];
-    // const prematchChildren: MenuItem[] = [];
-    const prematchChildren = p ? categMenuItem(sportId, p, "prematch") : [];
-
-    // console.log("liveChildren, prematchChildren :>> ", liveChildren, prematchChildren);
+    const liveChildren = fullBootstrap?.l ? categMenuItem(sportId, fullBootstrap.l, "live") : [];
+    const prematchChildren = fullBootstrap?.p ? categMenuItem(sportId, fullBootstrap.p, "prematch") : [];
 
     const liveItem: MenuItem = { key: `${sportId}_live`, label: "Live", icon: <IoMdTime />, children: liveChildren };
     const prematchItem: MenuItem = { key: `${sportId}_prematch`, label: "Prematch", children: prematchChildren };
