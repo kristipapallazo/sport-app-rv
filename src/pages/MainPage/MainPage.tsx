@@ -63,6 +63,15 @@ const MainPage: FC<Props> = () => {
         console.log("sportList", sportList);
         setStore((prev) => (prev ? { ...prev, sportList } : { sportList }));
 
+        /* get market groups */
+        try {
+          console.log("Interface", Interface);
+          const mg = await Interface.getMarketGroups();
+          console.log("mg", mg);
+        } catch (error) {
+          console.log("error", error);
+        }
+
         isInitial = false;
       }
 
@@ -146,7 +155,7 @@ const MainPage: FC<Props> = () => {
                 />
                 <Content>
                   <Left />
-                  <>{/* <Center /> */}</>
+                  <Center />
 
                   <>{/* <Right /> */}</>
                 </Content>

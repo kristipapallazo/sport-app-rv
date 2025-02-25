@@ -1,0 +1,27 @@
+.header {
+  flex-shrink: 0;
+  width: 100%;
+  display: flex;
+  column-gap: 2px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: black;
+  border-radius: inherit;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  /* padding: 5px; */
+}
+.headerChild {
+  flex-grow: 1;
+  height: 100%;
+  background-color: #306530;
+  color: white;
+  padding: 5px;
+}
+.btn {
+  color: white;
+}
+
+.live {
+}

@@ -1,28 +1,11 @@
 import React, { FC, ReactNode } from "react";
-import classes from "./AllMatchesContainer.module.css";
+
 import useCollection from "../../../../hooks/useCollection";
 
+import classes from "./AllMatchesContainer.module.css";
+import useMainCtx from "../../../../hooks/useMainCtx";
+
 interface AllMatchesContainerProps {}
-interface AllMatchesHeaderProps {
-  name: string;
-  hasSbv?: boolean;
-  isLive?: boolean;
-}
-interface MatchContentProps {
-  sportId: SportId;
-}
-const AllMatchesHeader: FC<AllMatchesHeaderProps> = (props) => {
-  const { name, hasSbv, isLive } = props;
-  const classname = `${classes.header} ${classes.isLive}`;
-  return (
-    <div className={classname}>
-      <span className={classes.headerChild}>{name}</span>
-      <span className={classes.headerChild}>{name}</span>
-      <span className={classes.headerChild}>{name}</span>
-      <span className={classes.headerChild}>btn</span>
-    </div>
-  );
-};
 
 interface MatchSectionProps {
   children: ReactNode;
@@ -38,72 +21,102 @@ const MatchSection: FC<MatchSectionProps> = (props) => {
     </span>
   );
 };
+
+interface MatchContentProps {
+  bootstrap: Bootstrap;
+  sportId: SportId;
+  live: LiveState;
+}
 const MatchContent: FC<MatchContentProps> = (props) => {
-  const { sportId } = props;
-  // const { sportSelectedCategAllIds, categById, tourById, matchById } = useCollection()!;
+  const { bootstrap, sportId, live } = props;
+  const { sportSelectedCategAllIds, categById, tourById, matchById } = bootstrap;
+  console.log("bootstrap", bootstrap);
+  const categAllIds = sportSelectedCategAllIds[sportId];
+
   const classname = `${classes.matchContent}`;
-  let items = [] as ReactNode[];
+  let items: ReactNode[] = [];
 
-  // sportSelectedCategAllIds[selectedSport].slice(0, 2).forEach((categId) => {
-  //   const categ = categById[categId];
-  //   const { name: categName, tourAllIds } = categ;
+  categAllIds.slice(0, 2).forEach((categId) => {
+    const categ = categById[categId];
+    const { name: categName, tourAllIds } = categ;
 
-  //   /* Todo: tourAllIds could be undefinded, solve it */
-  //   tourAllIds!.forEach((tourId) => {
-  //     const tour = tourById[tourId];
-  //     const { name: tourName, dateAllIds, dateById } = tour;
-  //     console.log("dateAllIds :>> ", dateAllIds);
-  //     const tourItem = dateAllIds.map((dateId) => {
-  //       const matchAllIds = dateById[dateId];
-  //       console.log("dateById :>> ", dateById);
-  //       console.log("matchAllIds :>> ", matchAllIds);
-  //       const matchList = matchAllIds.map((matchId) => {
-  //         const match = matchById[matchId];
-  //         const { home, away, time } = match;
-  //         return (
-  //           <div key={matchId} className={classes.match}>
-  //             <MatchSection className="timeSection" center={false}>
-  //               <span>{time}</span>
-  //               <span>{matchId}</span>
-  //             </MatchSection>
-  //             <MatchSection className="teamNamesSection" center={false}>
-  //               <span>{home}</span>
-  //               <span>{away}</span>
-  //             </MatchSection>
-  //             <MatchSection>odd</MatchSection>
-  //             <MatchSection>odd</MatchSection>
-  //             <MatchSection>odd</MatchSection>
-  //             <MatchSection>...</MatchSection>
-  //           </div>
-  //         );
-  //       });
+    /* Todo: tourAllIds could be undefinded, solve it */
+    tourAllIds!.forEach((tourId) => {
+      const tour = tourById[tourId];
+      const { name: tourName, dateAllIds, dateById } = tour;
+      const tourItem = dateAllIds.map((dateId) => {
+        const matchAllIds = live === "live" ? tour.matchAllIds : dateById[dateId];
+        const matchList = matchAllIds?.map((matchId) => {
+          const match = matchById[matchId];
+          const { home, away, time } = match;
+          return (
+            <div key={matchId} className={classes.match}>
+              <MatchSection className="timeSection" center={false}>
+                <span>{time}</span>
+                <span>{matchId}</span>
+              </MatchSection>
+              <MatchSection className="teamNamesSection" center={false}>
+                <span>{home}</span>
+                <span>{away}</span>
+              </MatchSection>
+              <MatchSection>odd</MatchSection>
+              <MatchSection>odd</MatchSection>
+              <MatchSection>odd</MatchSection>
+              <MatchSection>...</MatchSection>
+            </div>
+          );
+        });
 
-  //       const key = `${dateId}:${categId}:${tourId}`;
-  //       return (
-  //         <div key={key} className={classes.tourCont}>
-  //           <header className={classes.tourHeader}>
-  //             <span>{dateId}</span>
-  //             <span>{`${categId}/${tourId}`}</span>
-  //             <span>{`${categName}/${tourName}`}</span>
-  //           </header>
-  //           <div className={classes.matchList}>{matchList}</div>
-  //         </div>
-  //       );
-  //       // const tourItem = tourAllIds.map((tourId) => {});
-  //     });
-  //     items = [...items, ...tourItem];
-  //   });
-  // });
+        const key = `${dateId}:${categId}:${tourId}`;
+        return (
+          <div key={key} className={classes.tourCont}>
+            <header className={classes.tourHeader}>
+              <span>{dateId}</span>
+              <span>{`${categId}/${tourId}`}</span>
+              <span>{`${categName}/${tourName}`}</span>
+            </header>
+            <div className={classes.matchList}>{matchList}</div>
+          </div>
+        );
+        // const tourItem = tourAllIds.map((tourId) => {});
+      });
+      items = [...items, ...tourItem];
+    });
+  });
+
   return <div className={classname}>{items}</div>;
 };
 
 const AllMatchesContainer: FC<AllMatchesContainerProps> = (props) => {
-  return (
-    <div className={classes.cont}>
-      <AllMatchesHeader name="Sport Live" hasSbv={true} isLive={true} />
-      {/* <MatchContent /> */}
-    </div>
-  );
+  const { selectedSports } = useMainCtx();
+  const store = useCollection()!;
+
+  const {
+    sportList: { sportById },
+  } = store;
+
+  const sportMatchContainers = selectedSports.map((sportId) => {
+    const sportName = sportById[sportId].name;
+    const liveStateArr: LiveState[] = ["live", "prematch"];
+
+    return (
+      <div key={sportId}>
+        {liveStateArr.map((live) => {
+          const bootstrap = live === "live" ? store[sportId].l : store[sportId].p;
+          return (
+            <div key={`${sportId}_${live}`} style={{ position: "relative" }}>
+              <div style={{ position: "sticky", top: 0 }}>
+                <span>{sportName}</span>
+                <span>{live}</span>
+              </div>
+              <MatchContent bootstrap={bootstrap} sportId={sportId} live={live} />
+            </div>
+          );
+        })}
+      </div>
+    );
+  });
+  return <div className={classes.cont}>{sportMatchContainers}</div>;
 };
 
 export default AllMatchesContainer;

@@ -17,27 +17,19 @@ type MenuItem = Required<MenuProps>["items"][number];
 const categMenuItem = (sportId: SportId, bootstrap: Bootstrap, l: "live" | "prematch") => {
   const { sportSelectedCategAllIds, categById, tourById } = bootstrap;
 
-  console.log("bootstrap, l :>> ", bootstrap, l);
-  console.log("sportSelectedCategAllIds :>> ", sportSelectedCategAllIds);
-
-  // const sportObj = sportById[sportId];
-  // const { name } = sportObj;
-  // const label = upperCase(name);
-  // const icon = SPORT_ICONS_OBJ[name];
-
   const children = sportSelectedCategAllIds[sportId].map((categId) => {
     const categ = categById[categId];
     const { name, tourAllIds } = categ;
 
     const key = `${sportId}_${l}_${categId}`;
-    /* Todo: tourAllIds could be undefinded, solve it */
+
     const children: MenuItem[] = tourAllIds!.map((tourId) => {
       const tour = tourById[tourId];
-      if (!tour) alert(`${l} ${categId}, ${tourId}`);
+      const { name } = tour;
 
       const childKey = `${key}_${tourId}`;
 
-      const child = { key: childKey, label: tour?.name || "xxxxxxxxxxx" };
+      const child = { key: childKey, label: name };
       return child;
     });
 

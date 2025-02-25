@@ -22,6 +22,8 @@ const themeConfig = {
   },
 };
 
+//https://adminaccess.site/?view=gcm
+
 const reactQueryClient = new QueryClient();
 
 const App = () => {

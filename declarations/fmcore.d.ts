@@ -369,6 +369,7 @@ interface Window {
 
 type SportList = Sport[];
 type Live = 0 | 1;
+type LiveState = "live" | "prematch";
 type SportId = number;
 type CategId = number;
 type TourId = number;
@@ -558,7 +559,7 @@ interface ISportEventListManager {
   getCategs(sportId: SportId, live: number);
   getCategAllIds(sportId: number, live: number);
   getTours(categId: number, live: number);
-  getTourAllIds(categId: number, isLive: boolean);
+  getTourIds(categId: CategId, live: Live);
   getAllTours(sportId: number, live: number);
   getEventHierarchy(eventId: string);
   getEventMaps(eventId: string);
@@ -570,6 +571,7 @@ interface ISportMarketManager {
   getMarket(sportId: SportId, marketId: MarketId): Market | undefined;
   getMarketsTr(sportId: number);
   getMarketFilterList(mf: string);
+  getMarketGroups(): Promise<any>;
 }
 interface ISport extends Omit<ISportMarketManager, "addSportMarkets"> {
   EventListManager: ISportEventListManager;
@@ -594,7 +596,7 @@ interface ISport extends Omit<ISportMarketManager, "addSportMarkets"> {
   getCategs(sportId: SportId, live: number);
   getCategAllIds(sportId: number, live: number);
   getTours(categId: number, live: number);
-  getTourAllIds(categId: number, isLive: boolean);
+  getTourIds(categId: CategId, live: Live);
   getAllTours(sportId: number, live: number);
   getEventHierarchy(eventId: string);
   getEventMaps(eventId: string);
@@ -623,13 +625,14 @@ interface IInterface {
   getCategs(sportId: SportId, live: number);
   getCategAllIds(sportId: number, live: number);
   getTours(categId: number, live: number);
-  getTourAllIds(categId: number, isLive: boolean);
+  getTourIds(categId: CategId, live: Live);
   getAllTours(sportId: number, live: number);
   getEventHierarchy(eventId: string);
   getEventMaps(eventId: string);
   getAvailableDates(): DateAllIds;
 
   /* Market List Methods */
+  getMarketGroups(): Promise<any>;
 }
 
 interface DestructuredSports {
