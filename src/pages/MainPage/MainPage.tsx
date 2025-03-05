@@ -64,13 +64,11 @@ const MainPage: FC<Props> = () => {
         setStore((prev) => (prev ? { ...prev, sportList } : { sportList }));
 
         // /* get market groups */
-        // try {
-        //   console.log("Interface", Interface);
-        //   const mg = await Interface.getMarketGroups();
-        //   console.log("mg", mg);
-        // } catch (error) {
-        //   console.log("error", error);
-        // }
+        try {
+          const mg = await Interface.getMarketGroups();
+        } catch (error) {
+          console.log("error", error);
+        }
 
         isInitial = false;
       }

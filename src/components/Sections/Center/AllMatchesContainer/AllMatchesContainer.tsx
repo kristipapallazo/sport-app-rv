@@ -102,15 +102,21 @@ const AllMatchesContainer: FC<AllMatchesContainerProps> = (props) => {
     return (
       <div key={sportId}>
         {liveStateArr.map((live) => {
-          const bootstrap = live === "live" ? store[sportId].l : store[sportId].p;
+          const bootstrap = live === "live" ? store?.[sportId]?.l : store?.[sportId]?.p;
           return (
-            <div key={`${sportId}_${live}`} style={{ position: "relative" }}>
-              <div style={{ position: "sticky", top: 0 }}>
-                <span>{sportName}</span>
-                <span>{live}</span>
-              </div>
-              <MatchContent bootstrap={bootstrap} sportId={sportId} live={live} />
-            </div>
+            <>
+              {bootstrap ? (
+                <div key={`${sportId}_${live}`} style={{ position: "relative" }}>
+                  <div style={{ position: "sticky", top: 0 }}>
+                    <span>{sportName}</span>
+                    <span>{live}</span>
+                  </div>
+                  <MatchContent bootstrap={bootstrap} sportId={sportId} live={live} />
+                </div>
+              ) : (
+                <div>there is no bootstrap</div>
+              )}
+            </>
           );
         })}
       </div>
