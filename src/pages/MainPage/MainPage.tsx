@@ -60,15 +60,7 @@ const MainPage: FC<Props> = () => {
           handleSocketEventUpdate(e.detail);
         });
         const sportList = Interface.getSportListDestructured();
-        console.log("sportList", sportList);
         setStore((prev) => (prev ? { ...prev, sportList } : { sportList }));
-
-        // /* get market groups */
-        try {
-          const mg = await Interface.getMarketGroups();
-        } catch (error) {
-          console.log("error", error);
-        }
 
         isInitial = false;
       }
